@@ -36,6 +36,7 @@ import { z } from 'zod';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { addDays, format } from 'date-fns';
+import { useEffect } from 'react';
 
 const checkoutSchema = z.object({
   name: z.string().min(2, 'Name is too short'),
@@ -91,15 +92,17 @@ export default function CheckoutPage() {
     setTimeout(() => {
       // Store order details in session storage before clearing cart
       sessionStorage.setItem('latestOrder', JSON.stringify(orderDetails));
-      clearCart();
       router.push(`/marketplace/confirmation?orderId=${orderId}`);
+      clearCart();
     }, 2000);
   };
+  
+  useEffect(() => {
+    if (cart.length === 0 && !sessionStorage.getItem('latestOrder')) {
+      router.replace('/marketplace/cart');
+    }
+  }, [cart, router]);
 
-  if(cart.length === 0 && typeof window !== 'undefined') {
-    router.replace('/marketplace/cart');
-    return null;
-  }
 
   return (
     <div className="mx-auto max-w-4xl">
@@ -253,7 +256,7 @@ export default function CheckoutPage() {
                     </div>
                   </CardContent>
                 </Card>
-                <Button type="submit" className="w-full text-lg py-6" size="lg">
+                <Button type="submit" className="w-full text-lg py-6" size="lg" disabled={cart.length === 0}>
                   Proceed to Payment
                   <CreditCard className="ml-2"/>
                 </Button>
