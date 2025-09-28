@@ -38,7 +38,7 @@ export function PublicFooter() {
             <div>
               <p className="font-semibold text-foreground">Explore</p>
               <ul className="mt-4 space-y-2 text-sm">
-                <li><Link href="#features" className="text-muted-foreground hover:text-primary">Features</Link></li>
+                <li><Link href="/features" className="text-muted-foreground hover:text-primary">Features</Link></li>
                 <li><Link href="/marketplace" className="text-muted-foreground hover:text-primary">Marketplace</Link></li>
                 <li><Link href="/dashboard" className="text-muted-foreground hover:text-primary">Dashboard</Link></li>
               </ul>
@@ -46,9 +46,9 @@ export function PublicFooter() {
             <div>
               <p className="font-semibold text-foreground">About Us</p>
               <ul className="mt-4 space-y-2 text-sm">
-                <li><Link href="#" className="text-muted-foreground hover:text-primary">Our Mission</Link></li>
+                <li><Link href="/about" className="text-muted-foreground hover:text-primary">Our Mission</Link></li>
                 <li><Link href="#" className="text-muted-foreground hover:text-primary">Careers</Link></li>
-                <li><Link href="#" className="text-muted-foreground hover:text-primary">Contact Us</Link></li>
+                <li><Link href="/contact" className="text-muted-foreground hover:text-primary">Contact Us</Link></li>
               </ul>
             </div>
             <div className="col-span-2 lg:col-span-1">
