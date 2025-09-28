@@ -681,4 +681,216 @@ export const simFarmGames: Game[] = [
       },
     ],
   },
+  {
+    id: 'agroforestry',
+    title: 'Agroforestry Sim',
+    description: 'Integrate trees and crops to create a resilient, multi-layered farm ecosystem.',
+    levels: [
+      {
+        level: 1,
+        title: 'Initial Design',
+        description: "You're converting a conventional field to an agroforestry system. What's your first move?",
+        choices: [
+          { text: "Plant rows of nitrogen-fixing trees (like Gliricidia) with wide alleys for future crops.", isCorrect: true, feedback: "Excellent start! This 'alley cropping' system immediately begins improving soil fertility and creating a beneficial microclimate.", action: 'plant_cover_crop' },
+          { text: 'Plant a dense forest of mixed trees.', isCorrect: false, feedback: 'This will become a forest, not a farm. Agroforestry is about integrating trees WITH crops, not replacing them entirely.', action: 'fail_choice' },
+          { text: 'Plant a single row of fruit trees at the edge of the field.', isCorrect: false, feedback: "It's a start, but it's more of a windbreak than a true agroforestry system. The benefits will be minimal.", action: 'fail_choice' }
+        ]
+      },
+      {
+        level: 2,
+        title: 'First Pruning',
+        description: 'Your nitrogen-fixing trees are growing vigorously. What do you do with them?',
+        choices: [
+          { text: 'Prune them and use the leafy branches as mulch for the crop alleys ("chop and drop").', isCorrect: true, feedback: 'Perfect! You\'re recycling nutrients, suppressing weeds, and building organic matter right where your crops will need it.', action: 'mulch:true' },
+          { text: 'Let them grow as tall as possible to maximize shade.', isCorrect: false, feedback: 'Too much shade will prevent you from growing most sun-loving annual crops in the alleys.', action: 'fail_choice' },
+          { text: 'Cut them down and sell them for firewood.', isCorrect: false, feedback: "You've removed a key component of your system! The idea is to manage them for continuous nutrient cycling.", action: 'set_health:-30' }
+        ]
+      },
+      {
+        level: 3,
+        title: 'Understory Planting',
+        description: 'The trees are established. The alleys are mulched. What do you plant in the understory?',
+        choices: [
+          { text: 'A shade-tolerant crop like ginger or turmeric, which also enjoys the rich soil.', isCorrect: true, feedback: "A brilliant choice. You're stacking functions by choosing a crop that thrives in the specific microclimate you've created.", action: 'plant_seeds' },
+          { text: 'Sun-loving corn.', isCorrect: false, feedback: 'The corn struggles. It\'s too shaded by the established trees and can\'t reach its full potential.', action: 'set_health:-20' },
+          { text: 'Nothing. Keep the alleys clear.', isCorrect: false, feedback: "A missed opportunity! The space is perfect for another layer of productivity in your system.", action: 'fail_choice' }
+        ]
+      },
+      {
+        level: 4,
+        title: 'Adding Diversity',
+        description: 'Your system is functional but could be more diverse. What do you add?',
+        choices: [
+          { text: 'Introduce flowering shrubs along the tree lines to attract pollinators and beneficial insects.', isCorrect: true, feedback: "Yes! This increases resilience, provides pest control, and can even become another harvestable product.", action: 'add_beneficials:40' },
+          { text: 'Pave the alleys for easier access.', isCorrect: false, feedback: 'This destroys the soil you have worked so hard to build and removes productive space.', action: 'fail_choice' },
+        ]
+      },
+       {
+        level: 5,
+        title: 'Long-Term Yield',
+        description: 'Years later, your system is mature. The trees are providing nuts, the shrubs are providing berries, and the annual crops in the alleys are thriving.',
+        choices: [
+          { text: 'Harvest your diverse and resilient yields.', isCorrect: true, feedback: "Congratulations! You've built a complex, multi-layered agroforestry system that is productive, resilient, and ecologically sound.", action: 'harvest' },
+        ]
+      }
+    ]
+  },
+  {
+    id: 'crop-rotation',
+    title: 'Crop Rotation Challenge',
+    description: 'Master the art of crop rotation to break pest cycles and manage soil nutrients.',
+    levels: [
+      {
+        level: 1,
+        title: 'Year 1: The Foundation',
+        description: "You're planning a 4-year rotation for a single plot. What's a good crop to start with to build fertility?",
+        choices: [
+          { text: 'Legumes (Beans, Peas) - to fix nitrogen in the soil.', isCorrect: true, feedback: "A classic start! Legumes have a special relationship with bacteria that pulls nitrogen from the air and stores it in the soil.", action: 'set_nutrients_n:20' },
+          { text: 'Heavy Feeders (Corn, Tomatoes) - to get a big harvest right away.', isCorrect: false, feedback: 'This will deplete your soil\'s existing nutrients, making the following years much harder. It\'s better to build fertility first.', action: 'fail_choice' },
+        ]
+      },
+      {
+        level: 2,
+        title: 'Year 2: Following the Legumes',
+        description: 'You just harvested your beans. The soil is now nitrogen-rich. What should you plant next to take advantage of this?',
+        choices: [
+          { text: 'Leafy Greens (Lettuce, Spinach) - they love nitrogen!', isCorrect: true, feedback: 'Perfect! The nitrogen from the legumes will fuel vigorous, leafy growth for a fantastic harvest.', action: 'set_growth:2' },
+          { text: 'More Legumes (Soybeans) - you can never have too much nitrogen.', isCorrect: false, feedback: "This isn't optimal. You're not taking advantage of the free nitrogen for a different crop, and you risk building up legume-specific pests and diseases.", action: 'fail_choice' },
+        ]
+      },
+      {
+        level: 3,
+        title: 'Year 3: After the Greens',
+        description: 'The leafy greens have been harvested. The nitrogen is partially used up. What comes next in the sequence?',
+        choices: [
+          { text: 'Fruiting Crops (Tomatoes, Peppers) - they are heavy feeders and will use the remaining fertility.', isCorrect: true, feedback: 'Good choice. They will thrive on the remaining nutrients and their different growth habit will help disrupt pest cycles.', action: 'set_growth:3' },
+          { text: 'Root Crops (Carrots, Radishes) - they need loose soil.', isCorrect: false, feedback: "It's a bit early for root crops. They prefer less fertile soil, as too much nitrogen can cause them to grow hairy roots and small tops.", action: 'fail_choice' },
+        ]
+      },
+      {
+        level: 4,
+        title: 'Year 4: The Final Step',
+        description: "The heavy-feeding tomatoes are done. The soil's fertility is at its lowest point in the cycle. What's the ideal crop now?",
+        choices: [
+          { text: 'Root Crops (Carrots, Potatoes) - they can scavenge for nutrients and help break up compacted soil.', isCorrect: true, feedback: 'Exactly! Root crops finish the cycle. After this, you will plant a cover crop or return to legumes to restart the cycle.', action: 'set_growth:4' },
+          { text: 'More Heavy Feeders (Corn) - let\'s push the soil to its limit.', isCorrect: false, feedback: 'Your crop will be stunted and unhealthy. The soil is exhausted and needs to be replenished, not pushed further.', action: 'set_health:-40' },
+        ]
+      },
+      {
+        level: 5,
+        title: 'Completing the Cycle',
+        description: 'You have successfully completed a 4-year rotation, improving soil health and preventing pest buildup without chemicals.',
+        choices: [
+          { text: 'Plan the next 4-year cycle, starting with legumes again.', isCorrect: true, feedback: "You've mastered crop rotation! This sustainable practice is key to long-term organic farming success.", action: 'harvest' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'weed-management',
+    title: 'Integrated Weed Management',
+    description: 'Learn and apply sustainable, non-chemical techniques to manage weeds on your farm.',
+    levels: [
+       {
+        level: 1,
+        title: 'Pre-Emergent Strategy',
+        description: 'You are preparing a bed for planting carrots. You know it has a high weed seed bank. How do you get a head start on the weeds?',
+        choices: [
+          { text: 'Use the "stale seed bed" technique: water the bed, let weeds sprout, then kill them with shallow hoeing before planting carrots.', isCorrect: true, feedback: 'A brilliant pro-level technique! You\'ve tricked the first flush of weeds into showing themselves and eliminated them without deep tilling.', action: 'set_weeds:false' },
+          { text: 'Cover the bed with a thick black tarp for several weeks before planting.', isCorrect: true, feedback: 'Also an excellent choice! Solarization (or occultation) heats the soil, killing weed seeds and pathogens near the surface.', action: 'set_weeds:false' },
+          { text: 'Till the bed deeply to bury the weed seeds.', isCorrect: false, feedback: 'This is counter-productive. Tilling brings a new batch of dormant weed seeds to the surface, ready to germinate alongside your carrots.', action: 'till_soil' }
+        ]
+      },
+      {
+        level: 2,
+        title: 'Mulching',
+        description: 'Your crops are established, but weeds are starting to pop up between the rows. What is your primary tool?',
+        choices: [
+          { text: 'Apply a thick layer of straw or wood chip mulch.', isCorrect: true, feedback: 'The best defense! Mulch blocks sunlight from reaching weed seeds, preventing them from germinating. It also conserves water and builds soil.', action: 'mulch:true' },
+          { text: 'Spray the whole area with vinegar (acetic acid).', isCorrect: false, feedback: 'Vinegar is a non-selective herbicide and will burn your crops just as effectively as the weeds. It also does nothing to improve the soil.', action: 'fail_choice' },
+        ]
+      },
+      {
+        level: 3,
+        title: 'The Right Tool for the Job',
+        description: 'Some persistent weeds are poking through your mulch. Which tool is best for removing them with minimal soil disturbance?',
+        choices: [
+          { text: 'A stirrup hoe (hula hoe), which you slide just under the soil surface to cut weeds at the root.', isCorrect: true, feedback: 'The perfect tool! It slices off weeds without bringing new seeds to the surface, preserving your soil structure.', action: 'set_weeds:false' },
+          { text: 'A large garden hoe, chopping deeply into the soil.', isCorrect: false, feedback: 'This is too aggressive. The deep chopping action is basically tilling, and you\'ll just germinate more weeds.', action: 'fail_choice' },
+          { text: 'A propane flame weeder.', isCorrect: false, feedback: 'This is a great tool for pre-emergent weeding, but using it this close to your established crops is risky. You could easily scorch your plants.', action: 'set_health:-15' }
+        ]
+      },
+      {
+        level: 4,
+        title: 'Living Mulch',
+        description: 'In your orchard, grass and weeds are constantly growing around the base of your fruit trees.',
+        choices: [
+          { text: 'Plant a beneficial groundcover like clover or comfrey around the trees.', isCorrect: true, feedback: 'Excellent! You\'re using a "living mulch" to out-compete undesirable weeds. The clover adds nitrogen, and comfrey mines for deep nutrients.', action: 'plant_cover_crop' },
+          { text: 'Spray herbicide around each tree every month.', isCorrect: false, feedback: 'This creates a cycle of dependency on chemicals, harms soil life, and risks damaging your trees\' shallow roots.', action: 'use_chemicals' },
+        ]
+      },
+      {
+        level: 5,
+        title: 'Weed-Free Harvest',
+        description: 'Your integrated approach has worked. Your fields are clean, your soil is covered, and your crops are thriving without competition.',
+        choices: [
+          { text: 'Enjoy the harvest, knowing you beat the weeds sustainably.', isCorrect: true, feedback: 'Congratulations! You\'ve demonstrated a deep understanding of weed control that works with nature, not against it.', action: 'harvest' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'composting',
+    title: 'Composting & Waste Recycling',
+    description: 'Turn your farm\'s "waste" into a valuable soil amendment. Master the art of composting.',
+    levels: [
+      {
+        level: 1,
+        title: 'Building the Pile',
+        description: 'You have a pile of "green" materials (kitchen scraps, fresh grass clippings) and a pile of "brown" materials (dry leaves, straw). How do you start your compost pile?',
+        choices: [
+          { text: 'Layer the greens and browns like a lasagna, aiming for a 2:1 ratio of browns to greens by volume.', isCorrect: true, feedback: 'The perfect recipe! This Carbon-to-Nitrogen ratio provides the ideal diet for the microbes that will break down the materials.', action: 'add_compost' },
+          { text: 'Put all the greens in first, then pile the browns on top.', isCorrect: false, feedback: 'This will create problems. The large layer of greens will become a dense, slimy, anaerobic mess, and the browns will take forever to decompose.', action: 'fail_choice' },
+          { text: 'Mix it all together randomly.', isCorrect: false, feedback: 'Better than the wrong layers, but not ideal. Layering ensures good air and moisture distribution throughout the pile.', action: 'fail_choice' }
+        ]
+      },
+      {
+        level: 2,
+        title: 'Moisture Management',
+        description: 'Your pile has been sitting for a week. You squeeze a handful of the material and no water comes out, and it feels dry and crumbly.',
+        choices: [
+          { text: 'Add water. The pile should be as damp as a wrung-out sponge.', isCorrect: true, feedback: 'Correct! Microbes need water to live and work. A dry pile will stop decomposing.', action: 'set_water:70' },
+          { text: 'Do nothing. It needs to be dry.', isCorrect: false, feedback: 'The decomposition process has stalled due to lack of moisture. The pile will just sit there.', action: 'fail_choice' },
+        ]
+      },
+      {
+        level: 3,
+        title: 'Aeration and Turning',
+        description: 'The center of your pile is getting hot, which is good! But it\'s starting to smell like ammonia.',
+        choices: [
+          { text: 'Turn the pile with a pitchfork, moving the outer layers to the inside and vice versa. This introduces oxygen.', isCorrect: true, feedback: 'Exactly! The ammonia smell is a sign of anaerobic conditions. Turning the pile provides the oxygen the good microbes need and distributes heat and moisture.', action: 'set_health:10' },
+          { text: 'Cover the pile with a tarp to trap the smell.', isCorrect: false, feedback: 'This will make it worse! You\'re trapping the gasses and starving the pile of oxygen, encouraging the "bad" anaerobic microbes.', action: 'fail_choice' },
+        ]
+      },
+      {
+        level: 4,
+        title: 'When is it Ready?',
+        description: 'After several weeks, your pile has shrunk. How do you know the compost is finished and ready to use?',
+        choices: [
+          { text: 'It is dark, crumbly, and smells like rich earth. You can no longer identify the original ingredients.', isCorrect: true, feedback: 'That\'s the sign of beautiful, finished compost! It\'s ready to be added to your garden beds.', action: 'set_growth:4' },
+          { text: 'It is still warm in the center and you can see intact banana peels.', isCorrect: false, feedback: 'Not yet. If it\'s still hot and you can see the original materials, the decomposition process is still active. Using it now can "rob" nitrogen from your soil.', action: 'fail_choice' },
+        ]
+      },
+      {
+        level: 5,
+        title: 'Closing the Loop',
+        description: 'You have created nutrient-rich compost from your farm\'s waste products, which you can now use to grow healthy food.',
+        choices: [
+          { text: 'Spread the finished compost on your fields.', isCorrect: true, feedback: 'Congratulations! You have successfully closed the loop, turning waste into a valuable resource that builds soil fertility and resilience.', action: 'harvest' }
+        ]
+      }
+    ]
+  },
 ];
+
+    

@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Gamepad2, ArrowLeft, Wind, Sun, Droplets, Spade, Wheat, AlertTriangle, CheckCircle, XCircle, Bug, Shield, Tractor, Leaf, Bone, TestTube } from 'lucide-react';
+import { Gamepad2, ArrowLeft, Wind, Sun, Droplets, Spade, Wheat, AlertTriangle, CheckCircle, XCircle, Bug, Shield, Tractor, Leaf, Bone, TestTube, Trees, Recycle, Repeat, Scissors } from 'lucide-react';
 import { useState, useEffect, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { Progress } from '@/components/ui/progress';
@@ -237,6 +237,10 @@ function GamePlayer({ game, onBack }: { game: Game; onBack: () => void }) {
         case 'pest-control': return <Shield className="h-8 w-8 text-destructive" />;
         case 'water-management': return <Droplets className="h-8 w-8 text-blue-500" />;
         case 'soil-health': return <Tractor className="h-8 w-8 text-yellow-800" />;
+        case 'agroforestry': return <Trees className="h-8 w-8 text-green-700" />;
+        case 'crop-rotation': return <Repeat className="h-8 w-8 text-indigo-500" />;
+        case 'weed-management': return <Scissors className="h-8 w-8 text-orange-500" />;
+        case 'composting': return <Recycle className="h-8 w-8 text-lime-600" />;
         default: return <Gamepad2 className="h-8 w-8 text-primary" />;
     }
   }
@@ -366,13 +370,17 @@ export function SimulationMode() {
         case 'pest-control': return <Shield className="h-5 w-5 text-destructive" />;
         case 'water-management': return <Droplets className="h-5 w-5 text-blue-500" />;
         case 'soil-health': return <Tractor className="h-5 w-5 text-yellow-800" />;
+        case 'agroforestry': return <Trees className="h-5 w-5 text-green-700" />;
+        case 'crop-rotation': return <Repeat className="h-5 w-5 text-indigo-500" />;
+        case 'weed-management': return <Scissors className="h-5 w-5 text-orange-500" />;
+        case 'composting': return <Recycle className="h-5 w-5 text-lime-600" />;
         default: return <Gamepad2 className="h-5 w-5 text-primary" />;
     }
   }
 
   return (
     <div className="flex items-center justify-center">
-      <Card className="w-full max-w-2xl">
+      <Card className="w-full max-w-4xl">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 font-headline text-3xl">
             <Gamepad2 className="h-8 w-8 text-primary" />
@@ -387,13 +395,15 @@ export function SimulationMode() {
             <Button
               key={game.id}
               variant="outline"
-              className="h-auto flex-col items-start p-4 text-left hover:bg-accent hover:text-accent-foreground group"
+              className="h-auto flex-col items-start justify-between p-4 text-left group gap-2"
               onClick={() => setSelectedGame(game)}
             >
-              <p className="font-semibold text-primary flex items-center gap-2 group-hover:text-accent-foreground">
+              <div className="flex items-center gap-2">
                 {getIconForGame(game.id)}
-                {game.title}
-              </p>
+                <p className="font-semibold text-primary group-hover:text-accent-foreground">
+                  {game.title}
+                </p>
+              </div>
               <p className="text-sm text-muted-foreground whitespace-normal group-hover:text-accent-foreground/80">{game.description}</p>
             </Button>
           ))}
@@ -402,3 +412,5 @@ export function SimulationMode() {
     </div>
   );
 }
+
+    
