@@ -1,5 +1,6 @@
 'use client';
 
+import { simFarmGames } from '@/lib/data';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -9,49 +10,138 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Gamepad2 } from 'lucide-react';
+import { Gamepad2, ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
 
-type Scenario = {
-  title: string;
-  description: string;
-  choices: { text: string; isCorrect: boolean; feedback: string }[];
+export type Choice = {
+  text: string;
+  isCorrect: boolean;
+  feedback: string;
 };
 
-const scenarios: Scenario[] = [
-  {
-    title: 'Pest Invasion!',
-    description:
-      'You notice small, yellow insects on the underside of your tomato plant leaves. They seem to be multiplying quickly. What is your first organic-approved action?',
-    choices: [
-      {
-        text: 'Spray with a strong chemical pesticide.',
-        isCorrect: false,
-        feedback: 'Incorrect. Chemical pesticides are not allowed in organic farming and can harm beneficial insects.',
-      },
-      {
-        text: 'Introduce ladybugs to the area.',
-        isCorrect: true,
-        feedback: 'Excellent choice! Ladybugs are natural predators of aphids and a great organic pest control method.',
-      },
-      {
-        text: 'Ignore them and hope they go away.',
-        isCorrect: false,
-        feedback: 'Not a good idea. Pests can quickly destroy a crop if left unchecked.',
-      },
-    ],
-  },
-];
+export type Level = {
+  level: number;
+  title: string;
+  description: string;
+  choices: Choice[];
+};
 
-export function SimulationMode() {
-  const [currentScenario] = useState<Scenario>(scenarios[0]);
+export type Game = {
+  id: string;
+  title: string;
+  description: string;
+  levels: Level[];
+};
+
+function GamePlayer({
+  game,
+  onBack,
+}: {
+  game: Game;
+  onBack: () => void;
+}) {
+  const [currentLevel, setCurrentLevel] = useState(0);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [selectedChoice, setSelectedChoice] = useState<string | null>(null);
+  const [isGameWon, setIsGameWon] = useState(false);
 
-  const handleChoice = (choice: { text: string; feedback: string }) => {
+  const scenario = game.levels[currentLevel];
+
+  const handleChoice = (choice: Choice) => {
     setSelectedChoice(choice.text);
     setFeedback(choice.feedback);
+    if (choice.isCorrect) {
+      if (currentLevel === game.levels.length - 1) {
+        setIsGameWon(true);
+      }
+    }
   };
+
+  const handleNextLevel = () => {
+    if (currentLevel < game.levels.length - 1) {
+      setCurrentLevel(currentLevel + 1);
+      setSelectedChoice(null);
+      setFeedback(null);
+    }
+  };
+  
+  const resetGame = () => {
+    setCurrentLevel(0);
+    setSelectedChoice(null);
+    setFeedback(null);
+    setIsGameWon(false);
+  }
+
+  const isLevelCompleted = !!selectedChoice;
+  const wasChoiceCorrect =
+    isLevelCompleted &&
+    scenario.choices.find((c) => c.text === selectedChoice)?.isCorrect;
+
+  return (
+    <Card className="w-full max-w-2xl">
+      <CardHeader>
+        <div className="flex items-start justify-between">
+          <div>
+            <CardTitle className="flex items-center gap-2 font-headline text-3xl">
+              <Gamepad2 className="h-8 w-8 text-accent" />
+              {game.title}
+            </CardTitle>
+            <CardDescription>
+              {isGameWon ? 'Congratulations!' : scenario.title}
+            </CardDescription>
+          </div>
+          <Button variant="ghost" size="icon" onClick={onBack}>
+            <ArrowLeft />
+          </Button>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
+          <p className="text-muted-foreground">{scenario.description}</p>
+          <div className="grid grid-cols-1 gap-3">
+            {scenario.choices.map((choice, index) => (
+              <Button
+                key={index}
+                variant={
+                  selectedChoice === choice.text
+                    ? choice.isCorrect
+                      ? 'default'
+                      : 'destructive'
+                    : 'outline'
+                }
+                onClick={() => handleChoice(choice)}
+                disabled={isLevelCompleted}
+                className="h-auto min-h-12 justify-start whitespace-normal text-left"
+              >
+                {choice.text}
+              </Button>
+            ))}
+          </div>
+        </div>
+      </CardContent>
+      {isLevelCompleted && (
+        <CardFooter className="flex flex-col items-start gap-4">
+          <div className="w-full rounded-md border p-4">
+            <p className="font-semibold">Feedback:</p>
+            <p>{feedback}</p>
+          </div>
+          {isGameWon ? (
+            <Button onClick={resetGame}>Play Again</Button>
+          ) : wasChoiceCorrect && currentLevel < game.levels.length - 1 ? (
+             <Button onClick={handleNextLevel}>Next Level</Button>
+          ): null}
+        </CardFooter>
+      )}
+    </Card>
+  );
+}
+
+export function SimulationMode() {
+  const [selectedGame, setSelectedGame] = useState<Game | null>(null);
+
+  if (selectedGame) {
+    return <GamePlayer game={selectedGame} onBack={() => setSelectedGame(null)} />;
+  }
 
   return (
     <div className="flex items-center justify-center">
@@ -62,36 +152,22 @@ export function SimulationMode() {
             Sim-Farm Training
           </CardTitle>
           <CardDescription>
-            Test your farming knowledge in this interactive simulation.
+            Test your farming knowledge in these interactive simulations. Choose a game to start.
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <h3 className="font-semibold text-xl text-primary">{currentScenario.title}</h3>
-            <p className="text-muted-foreground">{currentScenario.description}</p>
-            <div className="grid grid-cols-1 gap-3">
-              {currentScenario.choices.map((choice, index) => (
-                <Button
-                  key={index}
-                  variant={selectedChoice === choice.text ? (choice.isCorrect ? 'default' : 'destructive') : 'outline'}
-                  onClick={() => handleChoice(choice)}
-                  disabled={!!selectedChoice}
-                  className="h-auto min-h-12 justify-start whitespace-normal text-left"
-                >
-                  {choice.text}
-                </Button>
-              ))}
-            </div>
-          </div>
+        <CardContent className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          {simFarmGames.map((game) => (
+            <Button
+              key={game.id}
+              variant="outline"
+              className="h-auto flex-col items-start p-4 text-left"
+              onClick={() => setSelectedGame(game)}
+            >
+              <p className="font-semibold text-primary">{game.title}</p>
+              <p className="text-sm text-muted-foreground whitespace-normal">{game.description}</p>
+            </Button>
+          ))}
         </CardContent>
-        {feedback && (
-          <CardFooter>
-            <div className="w-full rounded-md border p-4">
-              <p className="font-semibold">Feedback:</p>
-              <p>{feedback}</p>
-            </div>
-          </CardFooter>
-        )}
       </Card>
     </div>
   );
