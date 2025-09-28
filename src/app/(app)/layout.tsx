@@ -8,9 +8,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     <CartProvider>
       <SidebarProvider>
         <AppSidebar />
-        <SidebarInset className="bg-background">
+        <SidebarInset>
           <Header />
-          <main className="min-h-[calc(100vh-4rem)] p-4 pt-6 md:p-6 lg:p-8">
+          <main className="min-h-[calc(100vh-4rem)] p-4 pt-6 md:p-6 lg:p-8 bg-background">
             {children}
           </main>
         </SidebarInset>
