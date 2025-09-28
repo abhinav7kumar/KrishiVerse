@@ -123,17 +123,31 @@ function GamePlayer({ game, onBack }: { game: Game; onBack: () => void }) {
   const level = game.levels[currentLevelIndex];
 
   useEffect(() => {
-    if (gameState.health <= 0 && !isLevelCompleted) {
+    if (gameState.health <= 0 && !isLevelCompleted && !isGameWon && !isGameOver) {
         setIsGameOver(true);
         setFeedback({ text: "Your farm has failed. Critical conditions were not met. You must restart to try again.", correct: false });
     }
-  }, [gameState.health, isLevelCompleted]);
+  }, [gameState.health, isLevelCompleted, isGameWon, isGameOver]);
 
 
   const handleChoice = (choice: Choice) => {
+    if(isLevelCompleted || isGameOver || isGameWon) return;
+
     setFeedback({ text: choice.feedback, correct: choice.isCorrect });
     setIsLevelCompleted(true);
     
+    if (choice.isCorrect) {
+        if (level.level === game.levels.length) {
+            setIsGameWon(true);
+        }
+    } else {
+        if(choice.action.includes('fail_game')) {
+            setIsGameOver(true);
+            setGameState(prev => ({...prev, health: 0}));
+            return;
+        }
+    }
+
     setGameState(prev => {
       let newState = { ...prev };
       const [action, value] = choice.action.split(':');
@@ -141,37 +155,112 @@ function GamePlayer({ game, onBack }: { game: Game; onBack: () => void }) {
       const boolValue = value === 'true';
 
       switch (action) {
-        case 'add_compost': newState.soil = 'compost'; newState.nutrients = { n: 70, p: 60, k: 65 }; break;
-        case 'till_soil': newState.soil = 'tilled'; newState.health -= 25; break;
-        case 'plant_seeds': newState.seeded = true; newState.growth = 1; break;
-        case 'plant_deep': newState.seeded = true; newState.health -= 25; break;
-        case 'plant_crowded': newState.seeded = true; newState.health -= 50; break;
-        case 'drip_irrigation': newState.water = Math.min(100, prev.water + 30); if(newState.seeded && prev.growth < 2) newState.growth = 2; break;
-        case 'sprinkler': newState.water = Math.min(100, prev.water + 15); newState.health -= 5; break;
-        case 'flood': newState.water = 100; newState.health = 0; break;
-        case 'add_ladybugs': newState.pests = false; newState.beneficials = Math.min(100, prev.beneficials + 40); break;
-        case 'use_chemicals': newState.pests = false; newState.soil = 'damaged'; newState.health -= 20; newState.beneficials = 0; break;
-        case 'do_nothing_pests': newState.health -= 30; break;
-        case 'hand_weed': newState.weeds = false; break;
-        case 'mulch': newState.mulch = boolValue; newState.water = Math.min(100, prev.water + 15); if(boolValue) newState.weeds = false; break;
-        case 'plant_cover_crop': newState.soil = 'covered'; newState.nutrients.n = Math.min(100, prev.nutrients.n + 15); break;
-        case 'harvest': newState.growth = 5; isChoiceCorrect(choice) ? setIsGameWon(true) : setIsGameOver(true); break;
-        case 'fail_choice': newState.health = Math.max(0, prev.health - 20); break;
-        case 'set_growth': newState.growth = numValue; break;
-        case 'set_health': newState.health = Math.max(0, Math.min(100, prev.health + numValue)); break;
-        case 'set_water': newState.water = numValue; break;
-        case 'set_weeds': newState.weeds = boolValue; break;
-        case 'set_pests': newState.pests = boolValue; break;
-        case 'add_npk': newState.nutrients = { n: Math.min(100, prev.nutrients.n + 20), p: Math.min(100, prev.nutrients.p + 20), k: Math.min(100, prev.nutrients.k + 20)}; break;
-        case 'set_nutrients_n': newState.nutrients.n = Math.max(0, Math.min(100, prev.nutrients.n + numValue)); break;
-        case 'add_beneficials': newState.beneficials = Math.min(100, prev.beneficials + numValue); break;
-
+        case 'add_compost': 
+            newState.soil = 'compost'; 
+            newState.nutrients = { n: Math.min(100, prev.nutrients.n + 20), p: Math.min(100, prev.nutrients.p + 10), k: Math.min(100, prev.nutrients.k + 15) }; 
+            break;
+        case 'till_soil': 
+            newState.soil = 'tilled'; 
+            newState.health = Math.max(0, prev.health - 25); 
+            break;
+        case 'plant_seeds': 
+            newState.seeded = true; 
+            if(newState.growth === 0) newState.growth = 1;
+            break;
+        case 'plant_deep': 
+            newState.seeded = true; 
+            newState.health = Math.max(0, prev.health - 25); 
+            break;
+        case 'plant_crowded': 
+            newState.seeded = true; 
+            newState.health = Math.max(0, prev.health - 50); 
+            break;
+        case 'drip_irrigation': 
+            newState.water = Math.min(100, prev.water + 30); 
+            if(newState.seeded && prev.growth < 2 && choice.isCorrect) newState.growth = 2; 
+            break;
+        case 'sprinkler': 
+            newState.water = Math.min(100, prev.water + 15); 
+            newState.health = Math.max(0, prev.health - 5); 
+            break;
+        case 'flood': 
+            newState.water = 100; 
+            newState.health = 0; 
+            setIsGameOver(true);
+            break;
+        case 'add_ladybugs': 
+            newState.pests = false; 
+            newState.beneficials = Math.min(100, prev.beneficials + 40); 
+            break;
+        case 'use_chemicals': 
+            newState.pests = false; 
+            newState.soil = 'damaged'; 
+            newState.health = Math.max(0, prev.health - 20); 
+            newState.beneficials = 0; 
+            break;
+        case 'do_nothing_pests': 
+            newState.health = Math.max(0, prev.health - 30); 
+            break;
+        case 'hand_weed': 
+            newState.weeds = false; 
+            break;
+        case 'mulch': 
+            newState.mulch = boolValue; 
+            if(boolValue) {
+                newState.water = Math.min(100, prev.water + 15); 
+                newState.weeds = false;
+            }
+            break;
+        case 'plant_cover_crop': 
+            newState.soil = 'covered'; 
+            newState.nutrients.n = Math.min(100, prev.nutrients.n + 15); 
+            break;
+        case 'harvest': 
+            newState.growth = 5; 
+            if(choice.isCorrect) setIsGameWon(true);
+            break;
+        case 'fail_choice': 
+            newState.health = Math.max(0, prev.health - 20); 
+            break;
+        case 'fail_game':
+            newState.health = 0;
+            setIsGameOver(true);
+            break;
+        case 'set_growth': 
+            newState.growth = numValue; 
+            break;
+        case 'set_health': 
+            newState.health = Math.max(0, Math.min(100, prev.health + numValue)); 
+            break;
+        case 'set_water': 
+            newState.water = Math.max(0, Math.min(100, prev.water + numValue)); 
+            break;
+        case 'set_weeds': 
+            newState.weeds = boolValue; 
+            break;
+        case 'set_pests': 
+            newState.pests = boolValue; 
+            break;
+        case 'add_npk': 
+            newState.nutrients = { n: Math.min(100, prev.nutrients.n + 20), p: Math.min(100, prev.nutrients.p + 20), k: Math.min(100, prev.nutrients.k + 20)}; 
+            break;
+        case 'set_nutrients_n': 
+            newState.nutrients.n = Math.max(0, Math.min(100, prev.nutrients.n + numValue)); 
+            break;
+        case 'set_nutrients_p':
+            newState.nutrients.p = Math.max(0, Math.min(100, prev.nutrients.p + numValue));
+            break;
+        case 'set_nutrients_k':
+            newState.nutrients.k = Math.max(0, Math.min(100, prev.nutrients.k + numValue));
+            break;
+        case 'add_beneficials': 
+            newState.beneficials = Math.min(100, prev.beneficials + numValue); 
+            break;
       }
+      if(newState.health <=0) setIsGameOver(true)
       return newState;
     });
   };
-
-  const isChoiceCorrect = (choice: Choice) => choice.isCorrect;
 
   const handleNextLevel = () => {
     if (currentLevelIndex < game.levels.length - 1) {
@@ -183,14 +272,22 @@ function GamePlayer({ game, onBack }: { game: Game; onBack: () => void }) {
         let newState = { ...prev };
         const nextLevel = game.levels[currentLevelIndex + 1];
 
+        // Simulate passage of time and resource consumption
+        if (prev.seeded && prev.growth > 0) {
+           newState.water = Math.max(0, prev.water - 15);
+           newState.nutrients.n = Math.max(0, prev.nutrients.n - 10);
+           newState.nutrients.p = Math.max(0, prev.nutrients.p - 10);
+           newState.nutrients.k = Math.max(0, prev.nutrients.k - 10);
+        }
+
+        // Trigger events for the next level based on its title
         if (nextLevel.title.toLowerCase().includes("pest") || nextLevel.title.toLowerCase().includes("aphid")) newState.pests = true;
         if (nextLevel.title.toLowerCase().includes("weed")) newState.weeds = true;
-        if (nextLevel.title.toLowerCase().includes("water")) newState.water = Math.max(0, newState.water - 20);
-        if (nextLevel.title.toLowerCase().includes("nutrient")) {
-           newState.nutrients.n = Math.max(0, newState.nutrients.n - 25);
-           newState.nutrients.p = Math.max(0, newState.nutrients.p - 15);
+        if (nextLevel.title.toLowerCase().includes("water") || nextLevel.title.toLowerCase().includes("heatwave")) newState.water = Math.max(0, newState.water - 20);
+        
+        if (prev.growth > 0 && prev.growth < 4 && prev.health > 20) {
+            newState.growth = Math.min(4, prev.growth + 1);
         }
-        if (prev.growth > 0 && prev.growth < 4) newState.growth = Math.min(4, prev.growth + 1);
         
         return newState;
       });
@@ -323,7 +420,7 @@ function GamePlayer({ game, onBack }: { game: Game; onBack: () => void }) {
                 key={index}
                 variant={'outline'}
                 onClick={() => handleChoice(choice)}
-                disabled={isLevelCompleted || isGameOver}
+                disabled={isLevelCompleted || isGameOver || isGameWon}
                 className="h-auto min-h-12 justify-start whitespace-normal text-left"
               >
                 {choice.text}
@@ -332,7 +429,7 @@ function GamePlayer({ game, onBack }: { game: Game; onBack: () => void }) {
           </div>
         </div>
       </CardContent>
-      {(isLevelCompleted || isGameOver) && (
+      {(isLevelCompleted || isGameOver || isGameWon) && (
         <CardFooter className="flex flex-col items-start gap-4">
           <div className={cn(
               "w-full rounded-md border p-4 flex gap-4 items-center",
@@ -340,7 +437,7 @@ function GamePlayer({ game, onBack }: { game: Game; onBack: () => void }) {
             )}>
               {feedback?.correct ? <CheckCircle className="text-primary w-6 h-6 shrink-0"/> : <XCircle className="text-destructive w-6 h-6 shrink-0"/>}
             <div>
-                <p className="font-semibold">{isGameOver ? "Game Over" : feedback?.correct ? "Good Choice!" : "Think Again..."}</p>
+                <p className="font-semibold">{isGameOver ? "Game Over" : isGameWon ? "Success!" : feedback?.correct ? "Good Choice!" : "Think Again..."}</p>
                 <p>{feedback?.text}</p>
             </div>
           </div>
@@ -348,7 +445,7 @@ function GamePlayer({ game, onBack }: { game: Game; onBack: () => void }) {
             <Button onClick={resetGame}>Play Again</Button>
           ) : isGameOver ? (
             <Button onClick={resetGame} variant="destructive">Restart Game</Button>
-          ) : feedback?.correct ? (
+          ) : feedback?.correct && !isGameWon ? (
              <Button onClick={handleNextLevel}>{currentLevelIndex < game.levels.length - 1 ? 'Next Stage' : 'Complete Game'}</Button>
           ): null}
         </CardFooter>
@@ -412,5 +509,3 @@ export function SimulationMode() {
     </div>
   );
 }
-
-    

@@ -360,13 +360,13 @@ export const simFarmGames: Game[] = [
             text: 'A fertilizer higher in Phosphorus (P) and Potassium (K).',
             isCorrect: true,
             feedback: 'Exactly! These nutrients are crucial for flower development and producing a strong harvest. You add some bone meal and kelp.',
-            action: 'set_growth:4',
+            action: 'set_growth:4;set_nutrients_p:20;set_nutrients_k:20',
           },
           {
             text: 'A large dose of Nitrogen (N).',
             isCorrect: false,
             feedback: 'Too much nitrogen at this stage encourages lots of leafy growth at the expense of fruits and flowers. Your plants are bushy but not productive.',
-            action: 'set_nutrients_n:100',
+            action: 'set_nutrients_n:40',
           },
         ],
       },
@@ -428,7 +428,7 @@ export const simFarmGames: Game[] = [
                 text: 'Plant basil and marigolds around the tomatoes.',
                 isCorrect: true,
                 feedback: 'Excellent! Basil is known to repel tomato hornworms and whiteflies, while marigolds deter nematodes and other pests. This is a classic companion planting combination.',
-                action: 'plant_seeds'
+                action: 'plant_seeds;add_beneficials:10'
             },
             {
                 text: 'Plant corn next to them.',
@@ -440,7 +440,7 @@ export const simFarmGames: Game[] = [
                 text: 'Plant more tomatoes to ensure some survive.',
                 isCorrect: false,
                 feedback: 'A monoculture is a magnet for pests. This lack of diversity will likely make your pest problem worse, not better.',
-                action: 'fail_choice'
+                action: 'set_pests:true'
             }
         ]
       },
@@ -566,7 +566,7 @@ export const simFarmGames: Game[] = [
             isCorrect: false,
             feedback:
               'While it can be targeted, hand watering is often inconsistent, time-consuming, and can lead to shallow watering, which encourages weak root systems.',
-            action: 'set_water:40',
+            action: 'set_water:-10',
           },
         ],
       },
@@ -579,13 +579,13 @@ export const simFarmGames: Game[] = [
             text: 'Early morning (before 8 AM).',
             isCorrect: true,
             feedback: 'Perfect. Watering in the cool morning hours minimizes evaporation and allows the water to soak in deeply before the sun gets hot. This is the most efficient time.',
-            action: 'set_water:80',
+            action: 'set_water:30',
           },
           {
             text: 'Mid-day (12 PM - 2 PM).',
             isCorrect: false,
             feedback: 'This is the worst time. Evaporation is at its peak, and water droplets on leaves can act like magnifying glasses, scorching the plants.',
-            action: 'set_water:30',
+            action: 'set_water:-20;set_health:-10',
           },
           {
             text: 'Late evening (after 6 PM).',
@@ -610,7 +610,7 @@ export const simFarmGames: Game[] = [
                 text: 'Just water more often.',
                 isCorrect: false,
                 feedback: 'This is a temporary solution that wastes water. Without addressing evaporation, you are fighting a losing battle and risk creating shallow-rooted plants.',
-                action: 'set_water:50'
+                action: 'set_water:-20'
             },
             {
                 text: 'Remove all surrounding plants to reduce competition.',
@@ -629,7 +629,7 @@ export const simFarmGames: Game[] = [
                 text: 'Check the soil moisture 2-4 inches below the surface.',
                 isCorrect: true,
                 feedback: 'This is the most reliable method. If the soil is dry at that depth, it\'s time to water. This ensures you are watering based on the plant\'s actual needs.',
-                action: 'set_water:60'
+                action: 'set_water:20'
             },
             {
                 text: 'Wait until the plants look wilted.',
@@ -654,7 +654,7 @@ export const simFarmGames: Game[] = [
                 text: 'Install rain barrels connected to rooftops and build swales on contour in the garden.',
                 isCorrect: true,
                 feedback: 'Brilliant! You are now capturing and storing a free resource. Rain barrels provide stored water, and swales help rainwater infiltrate the soil slowly instead of running off.',
-                action: 'set_water:100'
+                action: 'set_water:30'
             },
             {
                 text: 'Ensure your drainage system quickly removes all rainwater.',
@@ -692,7 +692,7 @@ export const simFarmGames: Game[] = [
         description: "You're converting a conventional field to an agroforestry system. What's your first move?",
         choices: [
           { text: "Plant rows of nitrogen-fixing trees (like Gliricidia) with wide alleys for future crops.", isCorrect: true, feedback: "Excellent start! This 'alley cropping' system immediately begins improving soil fertility and creating a beneficial microclimate.", action: 'plant_cover_crop' },
-          { text: 'Plant a dense forest of mixed trees.', isCorrect: false, feedback: 'This will become a forest, not a farm. Agroforestry is about integrating trees WITH crops, not replacing them entirely.', action: 'fail_choice' },
+          { text: 'Plant a dense forest of mixed trees.', isCorrect: false, feedback: 'This will become a forest, not a farm. Agroforestry is about integrating trees WITH crops, not replacing them entirely.', action: 'fail_game' },
           { text: 'Plant a single row of fruit trees at the edge of the field.', isCorrect: false, feedback: "It's a start, but it's more of a windbreak than a true agroforestry system. The benefits will be minimal.", action: 'fail_choice' }
         ]
       },
@@ -722,7 +722,7 @@ export const simFarmGames: Game[] = [
         description: 'Your system is functional but could be more diverse. What do you add?',
         choices: [
           { text: 'Introduce flowering shrubs along the tree lines to attract pollinators and beneficial insects.', isCorrect: true, feedback: "Yes! This increases resilience, provides pest control, and can even become another harvestable product.", action: 'add_beneficials:40' },
-          { text: 'Pave the alleys for easier access.', isCorrect: false, feedback: 'This destroys the soil you have worked so hard to build and removes productive space.', action: 'fail_choice' },
+          { text: 'Pave the alleys for easier access.', isCorrect: false, feedback: 'This destroys the soil you have worked so hard to build and removes productive space.', action: 'fail_game' },
         ]
       },
        {
@@ -745,8 +745,8 @@ export const simFarmGames: Game[] = [
         title: 'Year 1: The Foundation',
         description: "You're planning a 4-year rotation for a single plot. What's a good crop to start with to build fertility?",
         choices: [
-          { text: 'Legumes (Beans, Peas) - to fix nitrogen in the soil.', isCorrect: true, feedback: "A classic start! Legumes have a special relationship with bacteria that pulls nitrogen from the air and stores it in the soil.", action: 'set_nutrients_n:20' },
-          { text: 'Heavy Feeders (Corn, Tomatoes) - to get a big harvest right away.', isCorrect: false, feedback: 'This will deplete your soil\'s existing nutrients, making the following years much harder. It\'s better to build fertility first.', action: 'fail_choice' },
+          { text: 'Legumes (Beans, Peas) - to fix nitrogen in the soil.', isCorrect: true, feedback: "A classic start! Legumes have a special relationship with bacteria that pulls nitrogen from the air and stores it in the soil.", action: 'set_nutrients_n:20;plant_seeds' },
+          { text: 'Heavy Feeders (Corn, Tomatoes) - to get a big harvest right away.', isCorrect: false, feedback: 'This will deplete your soil\'s existing nutrients, making the following years much harder. It\'s better to build fertility first.', action: 'set_nutrients_n:-20;plant_seeds' },
         ]
       },
       {
@@ -754,7 +754,7 @@ export const simFarmGames: Game[] = [
         title: 'Year 2: Following the Legumes',
         description: 'You just harvested your beans. The soil is now nitrogen-rich. What should you plant next to take advantage of this?',
         choices: [
-          { text: 'Leafy Greens (Lettuce, Spinach) - they love nitrogen!', isCorrect: true, feedback: 'Perfect! The nitrogen from the legumes will fuel vigorous, leafy growth for a fantastic harvest.', action: 'set_growth:2' },
+          { text: 'Leafy Greens (Lettuce, Spinach) - they love nitrogen!', isCorrect: true, feedback: 'Perfect! The nitrogen from the legumes will fuel vigorous, leafy growth for a fantastic harvest.', action: 'plant_seeds' },
           { text: 'More Legumes (Soybeans) - you can never have too much nitrogen.', isCorrect: false, feedback: "This isn't optimal. You're not taking advantage of the free nitrogen for a different crop, and you risk building up legume-specific pests and diseases.", action: 'fail_choice' },
         ]
       },
@@ -763,7 +763,7 @@ export const simFarmGames: Game[] = [
         title: 'Year 3: After the Greens',
         description: 'The leafy greens have been harvested. The nitrogen is partially used up. What comes next in the sequence?',
         choices: [
-          { text: 'Fruiting Crops (Tomatoes, Peppers) - they are heavy feeders and will use the remaining fertility.', isCorrect: true, feedback: 'Good choice. They will thrive on the remaining nutrients and their different growth habit will help disrupt pest cycles.', action: 'set_growth:3' },
+          { text: 'Fruiting Crops (Tomatoes, Peppers) - they are heavy feeders and will use the remaining fertility.', isCorrect: true, feedback: 'Good choice. They will thrive on the remaining nutrients and their different growth habit will help disrupt pest cycles.', action: 'plant_seeds' },
           { text: 'Root Crops (Carrots, Radishes) - they need loose soil.', isCorrect: false, feedback: "It's a bit early for root crops. They prefer less fertile soil, as too much nitrogen can cause them to grow hairy roots and small tops.", action: 'fail_choice' },
         ]
       },
@@ -772,7 +772,7 @@ export const simFarmGames: Game[] = [
         title: 'Year 4: The Final Step',
         description: "The heavy-feeding tomatoes are done. The soil's fertility is at its lowest point in the cycle. What's the ideal crop now?",
         choices: [
-          { text: 'Root Crops (Carrots, Potatoes) - they can scavenge for nutrients and help break up compacted soil.', isCorrect: true, feedback: 'Exactly! Root crops finish the cycle. After this, you will plant a cover crop or return to legumes to restart the cycle.', action: 'set_growth:4' },
+          { text: 'Root Crops (Carrots, Potatoes) - they can scavenge for nutrients and help break up compacted soil.', isCorrect: true, feedback: 'Exactly! Root crops finish the cycle. After this, you will plant a cover crop or return to legumes to restart the cycle.', action: 'plant_seeds' },
           { text: 'More Heavy Feeders (Corn) - let\'s push the soil to its limit.', isCorrect: false, feedback: 'Your crop will be stunted and unhealthy. The soil is exhausted and needs to be replenished, not pushed further.', action: 'set_health:-40' },
         ]
       },
@@ -798,7 +798,7 @@ export const simFarmGames: Game[] = [
         choices: [
           { text: 'Use the "stale seed bed" technique: water the bed, let weeds sprout, then kill them with shallow hoeing before planting carrots.', isCorrect: true, feedback: 'A brilliant pro-level technique! You\'ve tricked the first flush of weeds into showing themselves and eliminated them without deep tilling.', action: 'set_weeds:false' },
           { text: 'Cover the bed with a thick black tarp for several weeks before planting.', isCorrect: true, feedback: 'Also an excellent choice! Solarization (or occultation) heats the soil, killing weed seeds and pathogens near the surface.', action: 'set_weeds:false' },
-          { text: 'Till the bed deeply to bury the weed seeds.', isCorrect: false, feedback: 'This is counter-productive. Tilling brings a new batch of dormant weed seeds to the surface, ready to germinate alongside your carrots.', action: 'till_soil' }
+          { text: 'Till the bed deeply to bury the weed seeds.', isCorrect: false, feedback: 'This is counter-productive. Tilling brings a new batch of dormant weed seeds to the surface, ready to germinate alongside your carrots.', action: 'till_soil;set_weeds:true' }
         ]
       },
       {
@@ -807,7 +807,7 @@ export const simFarmGames: Game[] = [
         description: 'Your crops are established, but weeds are starting to pop up between the rows. What is your primary tool?',
         choices: [
           { text: 'Apply a thick layer of straw or wood chip mulch.', isCorrect: true, feedback: 'The best defense! Mulch blocks sunlight from reaching weed seeds, preventing them from germinating. It also conserves water and builds soil.', action: 'mulch:true' },
-          { text: 'Spray the whole area with vinegar (acetic acid).', isCorrect: false, feedback: 'Vinegar is a non-selective herbicide and will burn your crops just as effectively as the weeds. It also does nothing to improve the soil.', action: 'fail_choice' },
+          { text: 'Spray the whole area with vinegar (acetic acid).', isCorrect: false, feedback: 'Vinegar is a non-selective herbicide and will burn your crops just as effectively as the weeds. It also does nothing to improve the soil.', action: 'fail_game' },
         ]
       },
       {
@@ -816,7 +816,7 @@ export const simFarmGames: Game[] = [
         description: 'Some persistent weeds are poking through your mulch. Which tool is best for removing them with minimal soil disturbance?',
         choices: [
           { text: 'A stirrup hoe (hula hoe), which you slide just under the soil surface to cut weeds at the root.', isCorrect: true, feedback: 'The perfect tool! It slices off weeds without bringing new seeds to the surface, preserving your soil structure.', action: 'set_weeds:false' },
-          { text: 'A large garden hoe, chopping deeply into the soil.', isCorrect: false, feedback: 'This is too aggressive. The deep chopping action is basically tilling, and you\'ll just germinate more weeds.', action: 'fail_choice' },
+          { text: 'A large garden hoe, chopping deeply into the soil.', isCorrect: false, feedback: 'This is too aggressive. The deep chopping action is basically tilling, and you\'ll just germinate more weeds.', action: 'set_weeds:true' },
           { text: 'A propane flame weeder.', isCorrect: false, feedback: 'This is a great tool for pre-emergent weeding, but using it this close to your established crops is risky. You could easily scorch your plants.', action: 'set_health:-15' }
         ]
       },
@@ -859,7 +859,7 @@ export const simFarmGames: Game[] = [
         title: 'Moisture Management',
         description: 'Your pile has been sitting for a week. You squeeze a handful of the material and no water comes out, and it feels dry and crumbly.',
         choices: [
-          { text: 'Add water. The pile should be as damp as a wrung-out sponge.', isCorrect: true, feedback: 'Correct! Microbes need water to live and work. A dry pile will stop decomposing.', action: 'set_water:70' },
+          { text: 'Add water. The pile should be as damp as a wrung-out sponge.', isCorrect: true, feedback: 'Correct! Microbes need water to live and work. A dry pile will stop decomposing.', action: 'set_water:30' },
           { text: 'Do nothing. It needs to be dry.', isCorrect: false, feedback: 'The decomposition process has stalled due to lack of moisture. The pile will just sit there.', action: 'fail_choice' },
         ]
       },
@@ -892,5 +892,3 @@ export const simFarmGames: Game[] = [
     ]
   },
 ];
-
-    
