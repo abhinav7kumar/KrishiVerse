@@ -166,7 +166,7 @@ function GamePlayer({ game, onBack }: { game: Game; onBack: () => void }) {
         case 'pest-control': return <Shield className="h-8 w-8 text-destructive" />;
         case 'water-management': return <Droplets className="h-8 w-8 text-blue-500" />;
         case 'soil-health': return <Tractor className="h-8 w-8 text-yellow-800" />;
-        default: return <Gamepad2 className="h-8 w-8 text-accent" />;
+        default: return <Gamepad2 className="h-8 w-8 text-primary" />;
     }
   }
 
@@ -286,7 +286,7 @@ export function SimulationMode() {
         case 'pest-control': return <Shield className="h-5 w-5 text-destructive" />;
         case 'water-management': return <Droplets className="h-5 w-5 text-blue-500" />;
         case 'soil-health': return <Tractor className="h-5 w-5 text-yellow-800" />;
-        default: return <Gamepad2 className="h-5 w-5 text-accent" />;
+        default: return <Gamepad2 className="h-5 w-5 text-primary" />;
     }
   }
 
@@ -295,7 +295,7 @@ export function SimulationMode() {
       <Card className="w-full max-w-2xl">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 font-headline text-3xl">
-            <Gamepad2 className="h-8 w-8 text-accent" />
+            <Gamepad2 className="h-8 w-8 text-primary" />
             Sim-Farm Training
           </CardTitle>
           <CardDescription>
@@ -307,14 +307,14 @@ export function SimulationMode() {
             <Button
               key={game.id}
               variant="outline"
-              className="h-auto flex-col items-start p-4 text-left hover:bg-accent hover:text-accent-foreground"
+              className="h-auto flex-col items-start p-4 text-left hover:bg-accent hover:text-accent-foreground group"
               onClick={() => setSelectedGame(game)}
             >
-              <p className="font-semibold text-primary flex items-center gap-2">
+              <p className="font-semibold text-primary flex items-center gap-2 group-hover:text-accent-foreground">
                 {getIconForGame(game.id)}
                 {game.title}
               </p>
-              <p className="text-sm text-muted-foreground whitespace-normal">{game.description}</p>
+              <p className="text-sm text-muted-foreground whitespace-normal group-hover:text-accent-foreground/80">{game.description}</p>
             </Button>
           ))}
         </CardContent>
