@@ -26,11 +26,10 @@ import { Separator } from '@/components/ui/separator';
 import { useCart } from '@/context/cart-context';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  Car,
-  CreditCard,
   Home,
   Package,
   Store,
+  CreditCard,
 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -68,9 +67,17 @@ export default function CheckoutPage() {
   });
 
   const onSubmit = (data: CheckoutFormValues) => {
-    console.log('Checkout Data:', data);
     const orderId = `KV-${Date.now()}`;
-
+    const orderDetails = {
+      orderId,
+      items: cart,
+      subtotal,
+      deliveryCharge,
+      tax,
+      total,
+      shippingInfo: data,
+    };
+    
     // In a real app, this would redirect to Razorpay
     toast({
       title: 'Redirecting to Payment...',
@@ -79,6 +86,8 @@ export default function CheckoutPage() {
 
     // Simulate payment success
     setTimeout(() => {
+      // Store order details in session storage before clearing cart
+      sessionStorage.setItem('latestOrder', JSON.stringify(orderDetails));
       clearCart();
       router.push(`/marketplace/confirmation?orderId=${orderId}`);
     }, 2000);
