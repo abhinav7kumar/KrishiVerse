@@ -98,7 +98,7 @@ export function FieldScanner() {
     }
   }, [isCameraOpen, toast]);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
       if (files.length > 10) {
@@ -109,22 +109,32 @@ export function FieldScanner() {
         });
         return;
       }
-      setImages([]);
-      const newImages: ImageAnalysis[] = [];
-      Array.from(files).forEach((file, index) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          const dataUri = reader.result as string;
-          const newImage: ImageAnalysis = { src: dataUri, analysis: null, loading: true };
-          newImages[index] = newImage;
-          
-          if(newImages.filter(i => i).length === files.length) {
-            setImages(newImages);
-            newImages.forEach(img => handleAnalysis(img.src));
-          }
-        };
-        reader.readAsDataURL(file);
+
+      const imagePromises = Array.from(files).map((file) => {
+        return new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
       });
+
+      try {
+        const dataUris = await Promise.all(imagePromises);
+        const newImages: ImageAnalysis[] = dataUris.map((uri) => ({
+          src: uri,
+          analysis: null,
+          loading: true,
+        }));
+        setImages(newImages);
+        newImages.forEach((img) => handleAnalysis(img.src));
+      } catch (error) {
+        toast({
+          title: 'Error reading files',
+          description: 'There was a problem uploading your images.',
+          variant: 'destructive',
+        });
+      }
     }
   };
 
@@ -319,5 +329,3 @@ export function FieldScanner() {
     </div>
   );
 }
-
-    
