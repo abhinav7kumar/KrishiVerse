@@ -18,7 +18,7 @@ const features = [
     icon: ScanLine,
     color: 'text-blue-500',
     bgColor: 'bg-blue-50',
-    link: '/scan'
+    link: '/login'
   },
   {
     title: 'AI Chatbot Agronomist',
@@ -26,7 +26,7 @@ const features = [
     icon: Bot,
     color: 'text-purple-500',
     bgColor: 'bg-purple-50',
-    link: '/chatbot'
+    link: '/login'
   },
   {
     title: 'Sustainable Marketplace',
@@ -34,7 +34,7 @@ const features = [
     icon: Store,
     color: 'text-orange-500',
     bgColor: 'bg-orange-50',
-    link: '/marketplace'
+    link: '/login'
   },
   {
     title: 'Gamified Missions & Leaderboard',
@@ -42,7 +42,7 @@ const features = [
     icon: Trophy,
     color: 'text-yellow-500',
     bgColor: 'bg-yellow-50',
-    link: '/leaderboard'
+    link: '/login'
   },
   {
     title: 'Farming Simulator',
@@ -50,7 +50,7 @@ const features = [
     icon: Gamepad2,
     color: 'text-red-500',
     bgColor: 'bg-red-50',
-    link: '/simulation'
+    link: '/login'
   },
   {
     title: 'AI Crop Recommendations',
@@ -58,7 +58,7 @@ const features = [
     icon: Leaf,
     color: 'text-green-500',
     bgColor: 'bg-green-50',
-    link: '/dashboard'
+    link: '/login'
   },
 ];
 

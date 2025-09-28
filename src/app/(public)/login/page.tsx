@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -12,15 +13,31 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import { useToast } from '@/hooks/use-toast';
 import { Chrome, KeyRound } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export default function LoginPage() {
   const router = useRouter();
+  const { toast } = useToast();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    router.push('/dashboard');
+    if (email === 'user@gmail.com' && password === '123456') {
+      const user = { name: 'Aarav Sharma', email: 'user@gmail.com' };
+      sessionStorage.setItem('krishi-user', JSON.stringify(user));
+      router.push('/dashboard');
+    } else {
+      toast({
+        title: 'Login Failed',
+        description: 'Invalid email or password. Please try again.',
+        variant: 'destructive',
+      });
+    }
   };
 
   return (
@@ -39,9 +56,11 @@ export default function LoginPage() {
               <Input
                 id="email"
                 type="text"
-                placeholder="you@example.com"
+                placeholder="user@gmail.com"
                 required
                 className="focus:ring-primary/50"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="space-y-2">
@@ -57,8 +76,11 @@ export default function LoginPage() {
               <Input
                 id="password"
                 type="password"
+                placeholder="123456"
                 required
                 className="focus:ring-primary/50"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
             <Button type="submit" className="w-full">

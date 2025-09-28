@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -13,10 +14,10 @@ import {
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { LogOut, User, ShoppingCart, History } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useCart } from '@/context/cart-context';
 import { Badge } from '../ui/badge';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 const baseTitleMap: Record<string, string> = {
   '/dashboard': 'Dashboard',
@@ -31,9 +32,24 @@ const baseTitleMap: Record<string, string> = {
   '/simulation': 'Farming Simulator',
 };
 
+type UserData = {
+  name: string;
+  email: string;
+};
+
 export function Header() {
   const pathname = usePathname();
+  const router = useRouter();
   const { cart } = useCart();
+  const [user, setUser] = useState<UserData | null>(null);
+
+  useEffect(() => {
+    const storedUser = sessionStorage.getItem('krishi-user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
   const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   const title = useMemo(() => {
@@ -43,6 +59,11 @@ export function Header() {
     }
     return baseTitleMap[pathname] || 'KrishiVerse';
   }, [pathname]);
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('krishi-user');
+    router.push('/login');
+  };
 
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-sm md:px-6">
@@ -70,22 +91,28 @@ export function Header() {
               <Avatar className="h-9 w-9">
                 <AvatarImage
                   src="https://picsum.photos/seed/farmer/100/100"
-                  alt="Farmer"
+                  alt={user?.name || 'Farmer'}
                 />
-                <AvatarFallback>F</AvatarFallback>
+                <AvatarFallback>{user?.name.charAt(0) || 'F'}</AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56" align="end" forceMount>
-            <DropdownMenuLabel className="font-normal">
-              <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">Farmer</p>
-                <p className="text-xs leading-none text-muted-foreground">
-                  farmer@krishiverse.com
-                </p>
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
+            {user && (
+              <>
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none">
+                      {user.name}
+                    </p>
+                    <p className="text-xs leading-none text-muted-foreground">
+                      {user.email}
+                    </p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+              </>
+            )}
             <DropdownMenuItem asChild>
               <Link href="/dashboard">
                 <User className="mr-2" />
@@ -99,7 +126,7 @@ export function Header() {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>
               <LogOut className="mr-2" />
               Log out
             </DropdownMenuItem>
