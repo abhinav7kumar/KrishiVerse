@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Bot, Gamepad2, ScanLine, Store, Trophy, Leaf, Sparkles } from 'lucide-react';
