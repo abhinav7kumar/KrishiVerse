@@ -37,6 +37,42 @@
       "imageHint": "corn vegetable"
     },
     {
+      "id": "apples",
+      "description": "Himalayan Apples",
+      "imageUrl": "https://images.unsplash.com/photo-1730387508083-7b0ffeeda8de?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxhcHBsZXMlMjBmcnVpdHxlbnwwfHx8fDE3NTg5OTI1OTN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "apples fruit"
+    },
+    {
+      "id": "oranges",
+      "description": "Sikkim Oranges",
+      "imageUrl": "https://images.unsplash.com/photo-1714219722249-aac95c540090?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxvcmFuZ2VzJTIwZnJ1aXR8ZW58MHx8fHwxNzU5MDQzNzk3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "oranges fruit"
+    },
+    {
+      "id": "spade",
+      "description": "Hand Spade",
+      "imageUrl": "https://images.unsplash.com/photo-1559059961-dd5b124d1dc5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxnYXJkZW4lMjB0b29sfGVufDB8fHx8MTc1OTA0Mzc5N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "garden tool"
+    },
+    {
+      "id": "rake",
+      "description": "Garden Rake",
+      "imageUrl": "https://images.unsplash.com/photo-1523301551780-cd17359a95d0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxnYXJkZW4lMjB0b29sfGVufDB8fHx8MTc1OTA0Mzc5N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "garden tool"
+    },
+    {
+      "id": "compost",
+      "description": "Organic Compost",
+      "imageUrl": "https://images.unsplash.com/photo-1590154743804-cf7c51dcbfd3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxmZXJ0aWxpemVyJTIwc29pbHxlbnwwfHx8fDE3NTkwNDM3OTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "fertilizer soil"
+    },
+    {
+      "id": "neem-oil",
+      "description": "Neem Oil Pesticide",
+      "imageUrl": "https://images.unsplash.com/photo-1557505482-fb5252df1d67?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxvcmdhbmljJTIwcGVzdGljaWRlfGVufDB8fHx8MTc1OTA0Mzc5N3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "organic pesticide"
+    },
+    {
       "id": "field_scan",
       "description": "A placeholder image for a field scan",
       "imageUrl": "https://images.unsplash.com/photo-1599138900450-3d06e89ad309?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxmYXJtJTIwZmllbGR8ZW58MHx8fHwxNzU4OTQ1MjM5fDA&ixlib=rb-4.1.0&q=80&w=1080",

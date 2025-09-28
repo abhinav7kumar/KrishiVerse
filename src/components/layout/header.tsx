@@ -1,10 +1,6 @@
 'use client';
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -15,8 +11,11 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import { LogOut, User } from 'lucide-react';
+import { LogOut, User, ShoppingCart, History } from 'lucide-react';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useCart } from '@/context/cart-context';
+import { Badge } from '../ui/badge';
 
 const pathToTitle: Record<string, string> = {
   '/dashboard': 'Dashboard',
@@ -24,12 +23,18 @@ const pathToTitle: Record<string, string> = {
   '/chatbot': 'AI Chatbot',
   '/leaderboard': 'Village Leaderboards',
   '/marketplace': 'Sustainable Marketplace',
+  '/marketplace/cart': 'Your Cart',
+  '/marketplace/checkout': 'Checkout',
+  '/marketplace/confirmation': 'Order Confirmed',
+  '/marketplace/orders': 'My Orders',
   '/simulation': 'Farming Simulator',
 };
 
 export function Header() {
   const pathname = usePathname();
   const title = pathToTitle[pathname] || 'KrishiVerse';
+  const { cart } = useCart();
+  const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-sm md:px-6">
@@ -39,12 +44,28 @@ export function Header() {
       <h1 className="font-headline text-lg font-semibold text-foreground md:text-xl">
         {title}
       </h1>
-      <div className="ml-auto flex items-center gap-4">
+      <div className="ml-auto flex items-center gap-2">
+        <Link href="/marketplace/cart">
+          <Button variant="ghost" size="icon" className="relative">
+            <ShoppingCart />
+            {cartItemCount > 0 && (
+              <Badge
+                variant="destructive"
+                className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full p-0"
+              >
+                {cartItemCount}
+              </Badge>
+            )}
+          </Button>
+        </Link>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-9 w-9 rounded-full">
               <Avatar className="h-9 w-9">
-                <AvatarImage src="https://picsum.photos/seed/farmer/100/100" alt="Farmer" />
+                <AvatarImage
+                  src="https://picsum.photos/seed/farmer/100/100"
+                  alt="Farmer"
+                />
                 <AvatarFallback>F</AvatarFallback>
               </Avatar>
             </Button>
@@ -59,9 +80,17 @@ export function Header() {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <User className="mr-2" />
-              Profile
+            <DropdownMenuItem asChild>
+              <Link href="/dashboard">
+                <User className="mr-2" />
+                Profile
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/marketplace/orders">
+                <History className="mr-2" />
+                My Orders
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>

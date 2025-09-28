@@ -3,6 +3,7 @@
 import {
   Bot,
   Gamepad2,
+  History,
   LayoutDashboard,
   Leaf,
   ScanLine,
@@ -23,6 +24,8 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar';
 import { cn } from '@/lib/utils';
+import { useCart } from '@/context/cart-context';
+import { Badge } from '../ui/badge';
 
 const navItems = [
   {
@@ -54,6 +57,20 @@ const navItems = [
     label: 'Marketplace',
     icon: ShoppingCart,
     tooltip: 'Sustainable Produce',
+    isGroup: true,
+  },
+  {
+    href: '/marketplace/cart',
+    label: 'Cart',
+    icon: ShoppingCart,
+    isSubItem: true,
+    hasBadge: true,
+  },
+  {
+    href: '/marketplace/orders',
+    label: 'My Orders',
+    icon: History,
+    isSubItem: true,
   },
   {
     href: '/simulation',
@@ -65,6 +82,8 @@ const navItems = [
 
 export function AppSidebar() {
   const pathname = usePathname();
+  const { cart } = useCart();
+  const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <Sidebar>
@@ -84,11 +103,19 @@ export function AppSidebar() {
               <Link href={item.href} passHref>
                 <SidebarMenuButton
                   as="a"
-                  isActive={pathname.startsWith(item.href)}
-                  tooltip={{
-                    children: item.tooltip,
-                    className: 'font-body',
-                  }}
+                  isActive={
+                    item.isGroup
+                      ? pathname.startsWith(item.href)
+                      : pathname === item.href
+                  }
+                  tooltip={
+                    item.tooltip
+                      ? {
+                          children: item.tooltip,
+                          className: 'font-body',
+                        }
+                      : undefined
+                  }
                 >
                   <item.icon />
                   <span
@@ -98,6 +125,9 @@ export function AppSidebar() {
                   >
                     {item.label}
                   </span>
+                  {item.hasBadge && cartItemCount > 0 && (
+                    <Badge className="ml-auto" variant="secondary">{cartItemCount}</Badge>
+                  )}
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>
