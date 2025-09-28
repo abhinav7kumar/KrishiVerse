@@ -1,3 +1,4 @@
+
 import {
   Award,
   Leaf,
@@ -109,6 +110,82 @@ export const marketplaceProduce: Produce[] = [
   { id: 'compost', name: 'Organic Compost', price: 'Rs 250/bag', category: 'fertilizer', unit: 'bag', priceValue: 250 },
   { id: 'neem-oil', name: 'Neem Oil Pesticide', price: 'Rs 400/bottle', category: 'fertilizer', unit: 'bottle', priceValue: 400 },
 ];
+
+export type Order = {
+  id: string;
+  date: string;
+  items: { name: string; quantity: number }[];
+  total: number;
+  status: 'Pending' | 'Shipped' | 'Delivered' | 'Cancelled';
+  trackingHistory: TrackingEvent[];
+};
+
+export type TrackingEvent = {
+  status: string;
+  date: string;
+  location: string;
+  isCompleted: boolean;
+};
+
+export const mockOrders: Order[] = [
+  {
+    id: 'KV-169873245',
+    date: 'Oct 31, 2023',
+    items: [
+      { name: 'Organic Tomatoes', quantity: 2 },
+      { name: 'Hand Spade', quantity: 1 },
+    ],
+    total: 590.0,
+    status: 'Delivered',
+    trackingHistory: [
+      { status: 'Order Confirmed', date: 'Oct 31, 2023, 10:05 AM', location: 'Gangtok, Sikkim', isCompleted: true },
+      { status: 'Packaged', date: 'Oct 31, 2023, 01:20 PM', location: 'Gangtok Warehouse', isCompleted: true },
+      { status: 'Shipped', date: 'Nov 01, 2023, 09:00 AM', location: 'Gangtok Hub', isCompleted: true },
+      { status: 'Out for Delivery', date: 'Nov 02, 2023, 08:30 AM', location: 'Namchi, Sikkim', isCompleted: true },
+      { status: 'Delivered', date: 'Nov 02, 2023, 11:45 AM', location: 'Namchi, Sikkim', isCompleted: true },
+    ],
+  },
+  {
+    id: 'KV-169869123',
+    date: 'Oct 30, 2023',
+    items: [{ name: 'Sikkim Oranges', quantity: 5 }],
+    total: 550.0,
+    status: 'Shipped',
+    trackingHistory: [
+      { status: 'Order Confirmed', date: 'Oct 30, 2023, 04:15 PM', location: 'Gangtok, Sikkim', isCompleted: true },
+      { status: 'Packaged', date: 'Oct 31, 2023, 09:00 AM', location: 'Gangtok Warehouse', isCompleted: true },
+      { status: 'Shipped', date: 'Oct 31, 2023, 05:00 PM', location: 'Rangpo Hub', isCompleted: true },
+      { status: 'Out for Delivery', date: 'Nov 01, 2023', location: 'Gyalshing, Sikkim', isCompleted: false },
+      { status: 'Delivered', date: 'Nov 02, 2023', location: 'Gyalshing, Sikkim', isCompleted: false },
+    ],
+  },
+  {
+    id: 'KV-169850456',
+    date: 'Oct 28, 2023',
+    items: [{ name: 'Organic Compost', quantity: 3 }],
+    total: 800.0,
+    status: 'Pending',
+     trackingHistory: [
+      { status: 'Order Confirmed', date: 'Oct 28, 2023, 11:00 AM', location: 'Pakyong, Sikkim', isCompleted: true },
+      { status: 'Packaged', date: 'Oct 29, 2023', location: 'Pakyong Warehouse', isCompleted: false },
+      { status: 'Shipped', date: 'Oct 30, 2023', location: 'Pakyong Hub', isCompleted: false },
+      { status: 'Out for Delivery', date: 'Oct 31, 2023', location: 'Mangan, Sikkim', isCompleted: false },
+      { status: 'Delivered', date: 'Nov 01, 2023', location: 'Mangan, Sikkim', isCompleted: false },
+    ],
+  },
+  {
+    id: 'KV-169841890',
+    date: 'Oct 27, 2023',
+    items: [{ name: 'Sikkim Potatoes', quantity: 10 }],
+    total: 650.0,
+    status: 'Cancelled',
+    trackingHistory: [
+       { status: 'Order Confirmed', date: 'Oct 27, 2023, 02:30 PM', location: 'Soreng, Sikkim', isCompleted: true },
+       { status: 'Cancelled', date: 'Oct 28, 2023, 09:00 AM', location: 'Soreng, Sikkim', isCompleted: true },
+    ],
+  },
+];
+
 
 export const simFarmGames: Game[] = [
   {
@@ -969,7 +1046,7 @@ export const simFarmGames: Game[] = [
             isCorrect: true,
             feedback:
               'Perfect! The nitrogen from the legumes will fuel vigorous, leafy growth for a fantastic harvest.',
-            action: 'plant_seeds',
+            action: 'next_year;plant_seeds',
           },
           {
             text: 'More Legumes (Soybeans) - you can never have too much nitrogen.',
@@ -991,9 +1068,277 @@ export const simFarmGames: Game[] = [
             isCorrect: true,
             feedback:
               'Good choice. They will thrive on the remaining nutrients and their different growth habit will help disrupt pest cycles.',
-            action: 'plant_seeds',
+            action: 'next_year;plant_seeds',
           },
           {
             text: 'Root Crops (Carrots, Radishes) - they need loose soil.',
             isCorrect: false,
-f...
+            feedback:
+              "This is a valid choice, but fruiting crops are generally heavier feeders and will make better use of the available fertility at this stage.",
+            action: 'fail_choice',
+          },
+        ],
+      },
+      {
+        level: 4,
+        title: 'Year 4: The Final Step',
+        description: 'You just harvested the tomatoes. The soil has been worked hard for two years. What do you plant now?',
+        choices: [
+          {
+            text: 'Root Crops (Carrots, Beets) - they break up soil and scavenge for deeper nutrients.',
+            isCorrect: true,
+            feedback: 'Excellent. Root crops will help improve soil structure, and they are generally light feeders, which is perfect for this stage.',
+            action: 'next_year;plant_seeds',
+          },
+          {
+            text: 'More Fruiting Crops (Squash) - let\'s get another big harvest!',
+            isCorrect: false,
+            feedback: 'The soil is too depleted for another round of heavy feeders. Your squash plants will be stunted and unproductive.',
+            action: 'fail_choice',
+          }
+        ]
+      },
+       {
+        level: 5,
+        title: 'Completing the Cycle',
+        description: 'You have completed the four-year rotation. The final step before starting over is critical.',
+        choices: [
+          {
+            text: 'Plant a winter cover crop to rest and rejuvenate the soil before starting with legumes again.',
+            isCorrect: true,
+            feedback: 'Perfect! You have mastered the principles of crop rotation, ensuring long-term soil health and productivity.',
+            action: 'harvest',
+          },
+          {
+            text: 'Leave the field fallow (empty).',
+            isCorrect: false,
+            feedback: 'This leaves the soil exposed to erosion and does little to actively rebuild fertility.',
+            action: 'fail_choice',
+          }
+        ]
+      }
+    ],
+  },
+   {
+    id: 'weed-management',
+    title: 'Weed Management',
+    description: 'Learn sustainable and organic techniques to manage weeds effectively.',
+    levels: [
+      {
+        level: 1,
+        title: 'Pre-Emergent Strategy',
+        description: 'You are preparing a bed for carrots, which are slow to germinate. How do you get a head start on weeds?',
+        choices: [
+          {
+            text: 'Use the "stale seedbed" technique: prepare the bed, water it to sprout weeds, then kill them with shallow hoeing before planting.',
+            isCorrect: true,
+            feedback: 'A clever, proactive strategy! You\'ve eliminated the first flush of weeds, giving your carrots a clean start.',
+            action: 'set_weeds:false',
+          },
+          {
+            text: 'Cover the bed with black plastic for a few weeks before planting.',
+            isCorrect: true,
+            feedback: 'This "solarization" technique heats the soil, killing weed seeds and some pathogens. Very effective!',
+            action: 'set_weeds:false',
+          },
+          {
+            text: 'Spray a pre-emergent chemical herbicide.',
+            isCorrect: false,
+            feedback: 'This is not an organic method and can have long-lasting negative effects on soil life.',
+            action: 'use_chemicals',
+          }
+        ]
+      },
+      {
+        level: 2,
+        title: 'Mulching',
+        description: 'Your tomato plants are established. Weeds are starting to pop up between them. What\'s your move?',
+        choices: [
+          {
+            text: 'Apply a thick layer of straw or wood chip mulch.',
+            isCorrect: true,
+            feedback: 'Excellent. Mulch blocks sunlight, preventing most weed seeds from germinating. It also conserves water and improves the soil.',
+            action: 'mulch:true',
+          },
+          {
+            text: 'Diligently pull every weed by hand every day.',
+            isCorrect: false,
+            feedback: 'While effective, this is extremely labor-intensive. A good mulch layer would save you hours of work.',
+            action: 'fail_choice',
+          },
+           {
+            text: 'Use a weed-whacker to cut them down.',
+            isCorrect: false,
+            feedback: 'This just trims the tops. The roots are left intact, and the weeds will grow back quickly, possibly stronger than before.',
+            action: 'set_weeds:true',
+          }
+        ]
+      },
+      {
+        level: 3,
+        title: 'The Right Tool',
+        description: 'Tiny thread-like weeds are emerging in your rows of lettuce. They are too small to pull. What tool do you use?',
+        choices: [
+          {
+            text: 'A stirrup hoe (or hula hoe), used just below the surface to sever the weeds.',
+            isCorrect: true,
+            feedback: 'The perfect tool for the job! It allows you to quickly and easily eliminate weeds at this stage with minimal soil disturbance.',
+            action: 'set_weeds:false',
+          },
+          {
+            text: 'A large garden hoe, chopping deeply.',
+            isCorrect: false,
+            feedback: 'This is too aggressive. You risk damaging the shallow roots of your lettuce and bringing new weed seeds to the surface.',
+            action: 'set_health:-10',
+          },
+          {
+            text: 'A propane torch to flame-weed them.',
+            isCorrect: false,
+            feedback: 'Flame weeding can be effective, but it\'s risky this close to delicate lettuce plants. You might cook your crop!',
+            action: 'set_health:-30',
+          }
+        ]
+      },
+      {
+        level: 4,
+        title: 'Living Mulch',
+        description: 'You are growing tall corn. The space between the rows is bare and getting weedy. How can you use this space productively?',
+        choices: [
+          {
+            text: 'Interplant a low-growing cover crop like clover.',
+            isCorrect: true,
+            feedback: 'Fantastic! The clover will act as a "living mulch," outcompeting weeds and fixing nitrogen for the corn at the same time.',
+            action: 'plant_cover_crop',
+          },
+          {
+            text: 'Cover the area with landscape fabric.',
+            isCorrect: false,
+            feedback: 'This will control weeds, but it\'s a missed opportunity to build soil and add biodiversity.',
+            action: 'fail_choice',
+          }
+        ]
+      },
+       {
+        level: 5,
+        title: 'Weed-Free Harvest',
+        description: 'Your integrated approach has kept weeds in check all season, allowing your crops to thrive without competition.',
+        choices: [
+          {
+            text: 'Enjoy your clean and abundant harvest.',
+            isCorrect: true,
+            feedback: 'Congratulations! You have demonstrated a sophisticated understanding of organic weed management.',
+            action: 'harvest',
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'composting',
+    title: 'Composting Masterclass',
+    description: 'Learn to create nutrient-rich compost from farm and kitchen waste.',
+    levels: [
+      {
+        level: 1,
+        title: 'The Basic Recipe',
+        description: 'To start a good compost pile, you need a balance of "Greens" (Nitrogen) and "Browns" (Carbon). What is a good ratio to start with?',
+        choices: [
+          {
+            text: 'Roughly equal parts Greens and Browns by volume.',
+            isCorrect: true,
+            feedback: 'A great starting point! This provides a balanced diet for the microorganisms that will break down the material.',
+            action: 'add_compost',
+          },
+          {
+            text: 'All Greens (e.g., grass clippings, kitchen scraps).',
+            isCorrect: false,
+            feedback: 'Your pile will quickly become a slimy, smelly mess. Without Carbon, it will putrefy instead of compost.',
+            action: 'fail_game',
+          },
+           {
+            text: 'All Browns (e.g., dry leaves, wood chips).',
+            isCorrect: false,
+            feedback: 'Your pile will sit there for years without breaking down. The microbes need Nitrogen to fuel their work.',
+            action: 'fail_choice',
+          }
+        ]
+      },
+      {
+        level: 2,
+        title: 'What NOT to Add',
+        description: 'You are collecting materials for your pile. Which of these should you leave out?',
+        choices: [
+          {
+            text: 'Meat, bones, and oily foods.',
+            isCorrect: true,
+            feedback: 'Correct. These materials can attract pests, create foul odors, and harbor pathogens. They are best avoided in a simple compost pile.',
+            action: 'add_compost',
+          },
+          {
+            text: 'Eggshells and coffee grounds.',
+            isCorrect: false,
+            feedback: 'These are excellent additions! Eggshells add calcium and coffee grounds are a great source of nitrogen.',
+            action: 'fail_choice',
+          }
+        ]
+      },
+      {
+        level: 3,
+        title: 'Managing the Pile',
+        description: 'Your pile is built. What are the two other key ingredients for successful composting?',
+        choices: [
+          {
+            text: 'Water and Air.',
+            isCorrect: true,
+            feedback: 'Exactly! The pile should be as moist as a wrung-out sponge, and it needs to be turned occasionally to incorporate oxygen for the aerobic bacteria.',
+            action: 'add_compost',
+          },
+          {
+            text: 'Sunlight and Soil.',
+            isCorrect: false,
+            feedback: 'Compost piles can get hot on their own; direct sun can dry them out. While adding a bit of soil can introduce microbes, it\'s not essential like water and air.',
+            action: 'fail_choice',
+          },
+        ]
+      },
+      {
+        level: 4,
+        title: 'Hot Composting',
+        description: 'Your pile is getting hot in the center! This is a good sign. What does this heat do?',
+        choices: [
+          {
+            text: 'It speeds up decomposition and kills weed seeds and pathogens.',
+            isCorrect: true,
+            feedback: 'Yes! This is the major advantage of a well-managed "hot" pile. It produces finished compost much faster and results in a safer, cleaner product.',
+            action: 'add_compost',
+          },
+          {
+            text: 'It means the pile is about to catch fire.',
+            isCorrect: false,
+            feedback: 'While compost can get very hot (up to 160°F/70°C), it\'s extremely rare for a backyard pile to spontaneously combust. It\'s a sign of vigorous microbial activity.',
+            action: 'fail_choice',
+          }
+        ]
+      },
+       {
+        level: 5,
+        title: 'Finished Product',
+        description: 'After several weeks, your pile has transformed. How do you know when the compost is ready to use?',
+        choices: [
+          {
+            text: 'It is dark, crumbly, and smells earthy like a forest floor.',
+            isCorrect: true,
+            feedback: 'Perfect! You have successfully created "black gold" to enrich your soil.',
+            action: 'harvest',
+          },
+          {
+            text: 'It still has recognizable food scraps in it.',
+            isCorrect: false,
+            feedback: 'Not yet. If you can still see what you put in, it needs more time to break down.',
+            action: 'fail_choice',
+          }
+        ]
+      }
+    ]
+  }
+];
