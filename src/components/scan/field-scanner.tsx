@@ -185,7 +185,7 @@ export function FieldScanner() {
   const currentAnalysis = images[currentSlide];
 
   return (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:items-start">
       <div className="flex flex-col gap-4">
         <Card className="overflow-hidden">
           <div className="relative aspect-[4/3] w-full">
@@ -237,7 +237,7 @@ export function FieldScanner() {
         <div className="grid grid-cols-2 gap-2">
           <Button onClick={() => setIsCameraOpen(!isCameraOpen)} variant="outline">
             {isCameraOpen ? <X className="mr-2" /> : <Video className="mr-2" />}
-            {isCameraOpen ? 'Close Camera' : 'Open Camera'}
+            {isCameraOpen ? 'Close' : 'Camera'}
           </Button>
           {isCameraOpen ? (
             <Button onClick={handleCapture} disabled={hasCameraPermission === false}>
@@ -247,7 +247,7 @@ export function FieldScanner() {
           ) : (
             <Button onClick={triggerFileSelect}>
               <Upload className="mr-2" />
-              Upload Photo(s)
+              Upload
             </Button>
           )}
         </div>
@@ -263,7 +263,7 @@ export function FieldScanner() {
       </div>
 
       <div className="flex flex-col gap-4">
-        <Card className={cn(!currentAnalysis && 'flex items-center justify-center', 'min-h-[200px]')}>
+        <Card className={cn(!currentAnalysis && 'flex items-center justify-center', 'min-h-[300px] md:min-h-full')}>
           <CardHeader>
             <CardTitle>Analysis Results {images.length > 1 ? `(${currentSlide + 1}/${images.length})` : ''}</CardTitle>
           </CardHeader>

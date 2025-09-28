@@ -68,10 +68,9 @@ export default function OrdersPage() {
         <TableHeader>
           <TableRow>
             <TableHead>Order ID</TableHead>
-            <TableHead>Date</TableHead>
-            <TableHead>Items</TableHead>
+            <TableHead className="hidden md:table-cell">Date</TableHead>
             <TableHead>Status</TableHead>
-            <TableHead className="text-right">Total</TableHead>
+            <TableHead className="hidden sm:table-cell text-right">Total</TableHead>
             <TableHead className="text-center">Action</TableHead>
           </TableRow>
         </TableHeader>
@@ -79,18 +78,16 @@ export default function OrdersPage() {
           {ordersToShow.length > 0 ? (
             ordersToShow.map((order) => (
               <TableRow key={order.id}>
-                <TableCell className="font-medium text-primary">
+                <TableCell className="font-medium">
                   <Link
                     href={`/marketplace/orders/${order.id}`}
-                    className="hover:underline"
+                    className="text-primary hover:underline"
                   >
                     {order.id}
                   </Link>
+                  <div className="text-muted-foreground text-xs md:hidden mt-1">{order.date}</div>
                 </TableCell>
-                <TableCell>{order.date}</TableCell>
-                <TableCell>
-                  {order.items.map((item) => item.name).join(', ')}
-                </TableCell>
+                <TableCell className="hidden md:table-cell">{order.date}</TableCell>
                 <TableCell>
                   <Badge
                     variant="outline"
@@ -100,10 +97,10 @@ export default function OrdersPage() {
                     )}
                   >
                     {statusConfig[order.status].icon}
-                    {order.status}
+                    <span>{order.status}</span>
                   </Badge>
                 </TableCell>
-                <TableCell className="text-right font-semibold">
+                <TableCell className="hidden sm:table-cell text-right font-semibold">
                   Rs {order.total.toFixed(2)}
                 </TableCell>
                 <TableCell className="text-center">
@@ -141,8 +138,8 @@ export default function OrdersPage() {
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="all">
-          <TabsList>
-            <TabsTrigger value="all">All Orders</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-3 h-auto sm:w-auto sm:inline-flex">
+            <TabsTrigger value="all">All</TabsTrigger>
             <TabsTrigger value="Pending">Pending</TabsTrigger>
             <TabsTrigger value="Shipped">Shipped</TabsTrigger>
             <TabsTrigger value="Delivered">Delivered</TabsTrigger>

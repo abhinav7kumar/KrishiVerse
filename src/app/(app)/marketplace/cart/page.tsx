@@ -23,7 +23,7 @@ export default function CartPage() {
   const total = subtotal + deliveryCharge;
 
   return (
-    <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+    <div className="grid grid-cols-1 gap-8 lg:grid-cols-3 lg:items-start">
       <div className="lg:col-span-2">
         <Card>
           <CardHeader>
@@ -56,9 +56,9 @@ export default function CartPage() {
                   return (
                     <div
                       key={item.id}
-                      className="flex items-center gap-4 py-4"
+                      className="flex flex-wrap items-center gap-4 py-4"
                     >
-                      <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-md">
+                      <div className="relative h-24 w-24 flex-shrink-0 self-start overflow-hidden rounded-md md:h-20 md:w-20">
                         <Image
                           src={placeholder?.imageUrl || ''}
                           alt={item.name}
@@ -66,52 +66,54 @@ export default function CartPage() {
                           className="object-cover"
                         />
                       </div>
-                      <div className="flex-1">
+                      <div className="flex-1 basis-40">
                         <h4 className="font-semibold">{item.name}</h4>
                         <p className="text-sm text-muted-foreground">
                           {item.price}
                         </p>
-                        <span className="inline-block rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">
+                        <span className="mt-1 inline-block rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">
                           Sustainable
                         </span>
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex flex-1 items-center justify-between gap-2 sm:flex-none">
+                        <div className="flex items-center gap-2">
+                            <Button
+                            variant="outline"
+                            size="icon"
+                            className="h-8 w-8"
+                            onClick={() =>
+                                updateQuantity(item.id, item.quantity - 1)
+                            }
+                            disabled={item.quantity <= 1}
+                            >
+                            <Minus className="h-4 w-4" />
+                            </Button>
+                            <span className="w-8 text-center font-bold">
+                            {item.quantity}
+                            </span>
+                            <Button
+                            variant="outline"
+                            size="icon"
+                            className="h-8 w-8"
+                            onClick={() =>
+                                updateQuantity(item.id, item.quantity + 1)
+                            }
+                            >
+                            <Plus className="h-4 w-4" />
+                            </Button>
+                        </div>
+                        <div className="w-24 text-right font-semibold">
+                          Rs {(item.priceValue * item.quantity).toFixed(2)}
+                        </div>
                         <Button
-                          variant="outline"
+                          variant="ghost"
                           size="icon"
-                          className="h-8 w-8"
-                          onClick={() =>
-                            updateQuantity(item.id, item.quantity - 1)
-                          }
-                          disabled={item.quantity <= 1}
+                          className="text-muted-foreground hover:text-destructive"
+                          onClick={() => removeFromCart(item.id)}
                         >
-                          <Minus className="h-4 w-4" />
-                        </Button>
-                        <span className="w-8 text-center font-bold">
-                          {item.quantity}
-                        </span>
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          className="h-8 w-8"
-                          onClick={() =>
-                            updateQuantity(item.id, item.quantity + 1)
-                          }
-                        >
-                          <Plus className="h-4 w-4" />
+                          <Trash2 className="h-5 w-5" />
                         </Button>
                       </div>
-                      <div className="w-24 text-right font-semibold">
-                        Rs {(item.priceValue * item.quantity).toFixed(2)}
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="text-muted-foreground hover:text-destructive"
-                        onClick={() => removeFromCart(item.id)}
-                      >
-                        <Trash2 className="h-5 w-5" />
-                      </Button>
                     </div>
                   );
                 })}

@@ -19,12 +19,12 @@ type OrderTrackerProps = {
 };
 
 const statusIcons: { [key: string]: React.ReactNode } = {
-  'Order Confirmed': <ClipboardCheck className="h-8 w-8" />,
-  Packaged: <Package className="h-8 w-8" />,
-  Shipped: <Warehouse className="h-8 w-8" />,
-  'Out for Delivery': <Truck className="h-8 w-8" />,
-  Delivered: <PackageCheck className="h-8 w-8" />,
-  Cancelled: <PackageX className="h-8 w-8" />,
+  'Order Confirmed': <ClipboardCheck className="h-6 w-6 sm:h-8 sm:w-8" />,
+  Packaged: <Package className="h-6 w-6 sm:h-8 sm:w-8" />,
+  Shipped: <Warehouse className="h-6 w-6 sm:h-8 sm:w-8" />,
+  'Out for Delivery': <Truck className="h-6 w-6 sm:h-8 sm:w-8" />,
+  Delivered: <PackageCheck className="h-6 w-6 sm:h-8 sm:w-8" />,
+  Cancelled: <PackageX className="h-6 w-6 sm:h-8 sm:w-8" />,
 };
 
 const statusOrder = [
@@ -79,13 +79,13 @@ export function OrderTracker({ trackingHistory, status }: OrderTrackerProps) {
           transition: left 1.5s cubic-bezier(0.65, 0, 0.35, 1);
         }
       `}</style>
-      <CardContent className="p-6">
-        <div className="relative pt-16">
+      <CardContent className="p-4 sm:p-6 overflow-x-auto">
+        <div className="relative pt-16 min-w-[500px]">
           <div className="absolute top-20 flex w-full items-center">
             <div className="h-2 w-full rounded-full bg-muted">
               <div
                 className="h-2 rounded-full bg-primary transition-all duration-1000"
-                style={{ width: `${((completedSteps -1) / (totalSteps - 1)) * 100}%` }}
+                style={{ width: `${((completedSteps - 1) / (totalSteps - 1)) * 100}%` }}
               ></div>
             </div>
           </div>
@@ -109,7 +109,7 @@ export function OrderTracker({ trackingHistory, status }: OrderTrackerProps) {
               return (
                 <div
                   key={stepStatus}
-                  className="z-10 flex flex-col items-center text-center"
+                  className="z-10 flex flex-col items-center text-center w-20"
                 >
                   <div
                     className={cn(

@@ -37,23 +37,23 @@ export default function OrderDetailsPage({
   return (
     <div className="space-y-8">
       <div className="flex items-center gap-4">
-        <Button asChild variant="outline" size="icon">
+        <Button asChild variant="outline" size="icon" className="shrink-0">
           <Link href="/marketplace/orders">
             <ArrowLeft />
           </Link>
         </Button>
         <div>
-          <h1 className="font-headline text-3xl font-bold text-primary">
+          <h1 className="font-headline text-xl md:text-3xl font-bold text-primary truncate">
             Order Details
           </h1>
-          <p className="text-muted-foreground">
-            Tracking information and details for order{' '}
+          <p className="text-muted-foreground text-sm md:text-base truncate">
+            Tracking information for order{' '}
             <span className="font-semibold text-primary">{order.id}</span>.
           </p>
         </div>
       </div>
       <OrderTracker trackingHistory={order.trackingHistory} status={order.status} />
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3 lg:items-start">
         <div className="lg:col-span-2">
           <Card>
             <CardHeader>

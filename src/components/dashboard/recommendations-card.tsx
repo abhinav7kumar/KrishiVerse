@@ -18,7 +18,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Textarea } from '@/components/ui/textarea';
@@ -156,8 +155,8 @@ export function RecommendationsCard() {
                     Your Recommended Crops
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="grid grid-cols-1 gap-6 md:grid-cols-3">
-                  <div className="md:col-span-2">
+                <CardContent className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+                  <div className="sm:col-span-2">
                     <p className="whitespace-pre-wrap">{recommendation.cropRecommendations}</p>
                   </div>
                   <div className="flex flex-col items-center justify-center gap-2">

@@ -16,11 +16,11 @@ export default function DashboardPage() {
 
       <StatsCards />
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-        <div className="lg:col-span-2">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-5">
+        <div className="lg:col-span-3">
           <RecommendationsCard />
         </div>
-        <div className="lg:col-span-1">
+        <div className="lg:col-span-2">
           <MissionsCard />
         </div>
       </div>
