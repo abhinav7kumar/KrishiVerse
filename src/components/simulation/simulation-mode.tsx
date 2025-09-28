@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Gamepad2, ArrowLeft, Wind, Sun, Droplets, Spade, Wheat, AlertTriangle, CheckCircle, XCircle, Bug, Shield, Tractor, Leaf, Bone, TestTube, Trees, Recycle, Repeat, Scissors } from 'lucide-react';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { Progress } from '@/components/ui/progress';
 
@@ -116,11 +116,18 @@ function GamePlayer({ game, onBack }: { game: Game; onBack: () => void }) {
     crop: game.id === 'crop-growth' ? 'wheat' : 'generic',
     health: 100,
     mulch: false,
+    year: 1, // For crop-rotation
   }), [game.id]);
   
   const [gameState, setGameState] = useState(initialGameState);
+  const levelStateSnapshot = useRef(initialGameState);
 
   const level = game.levels[currentLevelIndex];
+
+  useEffect(() => {
+    // Snapshot the state when a new level starts
+    levelStateSnapshot.current = { ...gameState };
+  }, [currentLevelIndex, gameState]);
 
   useEffect(() => {
     if (gameState.health <= 0 && !isLevelCompleted && !isGameWon && !isGameOver) {
@@ -256,6 +263,9 @@ function GamePlayer({ game, onBack }: { game: Game; onBack: () => void }) {
         case 'add_beneficials': 
             newState.beneficials = Math.min(100, prev.beneficials + numValue); 
             break;
+        case 'next_year':
+            newState.year += 1;
+            break;
       }
       if(newState.health <=0) setIsGameOver(true)
       return newState;
@@ -294,6 +304,12 @@ function GamePlayer({ game, onBack }: { game: Game; onBack: () => void }) {
     } else {
         setIsGameWon(true);
     }
+  };
+
+  const handleTryAgain = () => {
+    setGameState(levelStateSnapshot.current);
+    setIsLevelCompleted(false);
+    setFeedback(null);
   };
 
   const resetGame = () => {
@@ -342,6 +358,17 @@ function GamePlayer({ game, onBack }: { game: Game; onBack: () => void }) {
     }
   }
 
+  const levelTitle = useMemo(() => {
+    if (isGameWon) return "Congratulations! You've completed the simulation!";
+    if (isGameOver) return "Game Over";
+    
+    let title = `Stage ${level.level}: ${level.title}`;
+    if (game.id === 'crop-rotation') {
+      title = `Year ${gameState.year}: ${level.title}`;
+    }
+    return title;
+  }, [isGameWon, isGameOver, level, game.id, gameState.year]);
+
 
   return (
     <Card className="w-full max-w-4xl">
@@ -352,7 +379,7 @@ function GamePlayer({ game, onBack }: { game: Game; onBack: () => void }) {
               {getIconForGame()}
               {game.title}
             </CardTitle>
-            <CardDescription>{isGameWon ? "Congratulations! You've completed the simulation!" : isGameOver ? "Game Over" : `Stage ${level.level}: ${level.title}`}</CardDescription>
+            <CardDescription>{levelTitle}</CardDescription>
           </div>
           <Button variant="ghost" size="icon" onClick={onBack}>
             <ArrowLeft />
@@ -441,13 +468,21 @@ function GamePlayer({ game, onBack }: { game: Game; onBack: () => void }) {
                 <p>{feedback?.text}</p>
             </div>
           </div>
-          {isGameWon ? (
-            <Button onClick={resetGame}>Play Again</Button>
-          ) : isGameOver ? (
-            <Button onClick={resetGame} variant="destructive">Restart Game</Button>
-          ) : feedback?.correct && !isGameWon ? (
-             <Button onClick={handleNextLevel}>{currentLevelIndex < game.levels.length - 1 ? 'Next Stage' : 'Complete Game'}</Button>
-          ): null}
+          <div className="flex items-center gap-2">
+            {isGameWon ? (
+                <Button onClick={resetGame}>Play Again</Button>
+            ) : isGameOver ? (
+                <Button onClick={resetGame} variant="destructive">Restart Game</Button>
+            ) : feedback?.correct ? (
+                <Button onClick={handleNextLevel}>
+                {currentLevelIndex < game.levels.length - 1 ? 'Next Stage' : 'Complete Game'}
+                </Button>
+            ) : (
+                <Button onClick={handleTryAgain} variant="secondary">
+                Try Again
+                </Button>
+            )}
+          </div>
         </CardFooter>
       )}
     </Card>
@@ -509,3 +544,5 @@ export function SimulationMode() {
     </div>
   );
 }
+
+    
