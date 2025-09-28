@@ -82,111 +82,132 @@ export const simFarmGames: Game[] = [
     levels: [
       {
         level: 1,
-        title: 'Assess Your Soil',
-        description:
-          "You're starting with a new plot of land. The soil looks compacted and lifeless. What's your first action?",
+        title: 'Initial Assessment',
+        description: "You're starting with a new plot of land. The soil is compacted, pale, and shows signs of erosion. What's your foundational strategy?",
         choices: [
           {
-            text: 'Add a thick layer of compost.',
+            text: 'Add a thick layer of diverse compost.',
             isCorrect: true,
-            feedback:
-              'Excellent! Compost introduces organic matter, improves structure, and feeds soil life.',
+            feedback: 'Excellent! Compost adds vital organic matter, kick-starts microbial life, and improves soil structure immediately.',
             action: 'add_compost',
           },
           {
-            text: 'Till the soil aggressively.',
+            text: 'Deep till the soil to loosen it up.',
             isCorrect: false,
-            feedback:
-              'This destroys the soil\'s natural structure and can cause more problems. Soil health has decreased.',
+            feedback: 'While it seems logical, deep tilling destroys the fragile soil ecosystem, breaks up fungal networks, and releases stored carbon. The soil structure is further weakened.',
             action: 'till_soil',
+          },
+          {
+            text: 'Apply a high-nitrogen chemical fertilizer.',
+            isCorrect: false,
+            feedback: 'This is a short-term fix that does nothing for soil structure or long-term health. It can also harm microbial life.',
+            action: 'use_chemicals',
           },
         ],
       },
       {
         level: 2,
         title: 'Cover Cropping',
-        description: 'The main season is over. How will you protect your soil until the next planting?',
+        description: 'The main season is over. The field is bare. How will you protect and improve your soil during the off-season?',
         choices: [
           {
-            text: 'Plant a cover crop like clover.',
+            text: 'Plant a diverse cover crop mix (e.g., clover, vetch, rye).',
             isCorrect: true,
-            feedback: 'Smart move! Cover crops prevent erosion, suppress weeds, and add organic matter when tilled back in.',
-            action: 'set_growth:1',
+            feedback: 'A superb choice. The mix of legumes (clover, vetch) will fix atmospheric nitrogen, while the rye will add significant biomass and prevent erosion. This is a powerful soil-building technique.',
+            action: 'plant_cover_crop',
           },
           {
-            text: 'Leave the soil bare.',
+            text: 'Leave the soil bare to "rest".',
             isCorrect: false,
-            feedback: 'Bare soil is vulnerable to erosion from wind and rain, and nutrient loss. Soil health has taken a hit.',
-            action: 'set_health:80',
+            feedback: 'Bare soil is vulnerable. Wind and rain will erode your precious topsoil, and without living roots, the soil biology will suffer.',
+            action: 'set_health:-20',
+          },
+           {
+            text: 'Cover the field with a plastic tarp.',
+            isCorrect: false,
+            feedback: 'This prevents erosion but suffocates the soil, killing beneficial organisms and halting the natural processes that build fertility.',
+            action: 'set_health:-10',
           },
         ],
       },
       {
         level: 3,
-        title: 'Nutrient Check',
-        description: 'Your plants look a bit yellow. What could be the issue?',
+        title: 'Incorporating Cover Crops',
+        description: "It's time to prepare for the main planting season. Your cover crop is lush and tall. What do you do?",
         choices: [
             {
-                text: 'It might be a Nitrogen deficiency.',
+                text: 'Use a roller-crimper to flatten the cover crop, creating a natural mulch.',
                 isCorrect: true,
-                feedback: 'Correct! Yellowing leaves (chlorosis) are a classic sign of nitrogen deficiency.',
-                action: 'add_npk'
+                feedback: 'Advanced technique! This "green manure" method smothers weeds, conserves water, and slowly releases nutrients as it decomposes. You plant directly into the mulch.',
+                action: 'mulch:true'
             },
             {
-                text: 'They probably have too much water.',
+                text: 'Till the cover crop into the soil.',
                 isCorrect: false,
-                feedback: 'While possible, yellowing is more directly linked to nutrient issues. Your plants continue to struggle.',
-                action: 'set_health:60'
+                feedback: 'This is a common method, but it still involves tilling, which disturbs the soil life you\'ve worked to build. Some benefit is lost.',
+                action: 'set_health:-5'
+            },
+            {
+                text: 'Cut and remove the cover crop for animal feed.',
+                isCorrect: false,
+                feedback: 'While you get feed, you\'re removing all the valuable organic matter and nutrients from the field. The primary soil-building benefit is lost.',
+                action: 'set_nutrients_n:-20'
             }
         ]
       },
        {
         level: 4,
-        title: 'Feeding The Soil',
-        description: 'You\'ve identified a nitrogen deficiency. How will you address it organically?',
+        title: 'Nutrient Management',
+        description: 'You\'ve planted your main crop (heavy-feeding tomatoes) into the mulch. Mid-season, the lower leaves start to yellow. What\'s your diagnosis and action?',
         choices: [
             {
-                text: 'Add a nitrogen-rich organic fertilizer like blood meal.',
+                text: 'It\'s likely a nitrogen deficiency. Top-dress with a nitrogen-rich amendment like feather meal or well-rotted chicken manure.',
                 isCorrect: true,
-                feedback: 'Perfect. You\'re feeding the soil and giving the plants the specific nutrient they need.',
+                feedback: 'Correct diagnosis and action. Heavy feeders need a mid-season boost, and using a slow-release organic source feeds the soil and the plant.',
                 action: 'add_npk'
             },
             {
-                text: 'Apply a generic chemical fertilizer.',
+                text: 'The plants need more water.',
                 isCorrect: false,
-                feedback: 'This is not an organic approach and can harm the delicate soil ecosystem. Soil health is damaged.',
+                feedback: 'While possible, the mulch is already helping conserve water. The specific yellowing pattern strongly points to a nutrient issue. The problem persists.',
+                action: 'fail_choice'
+            },
+            {
+                text: 'Spray the leaves with a liquid chemical fertilizer.',
+                isCorrect: false,
+                feedback: 'This is a "foliar feeding" shortcut. It might green up the leaves temporarily but does not address the root cause in the soil and is not a sustainable organic practice.',
                 action: 'use_chemicals'
             }
         ]
       },
       {
         level: 5,
-        title: 'Crop Rotation',
-        description: 'You\'ve harvested your leafy greens. What will you plant next in the same spot?',
+        title: 'Post-Harvest',
+        description: 'You\'ve had a great harvest! What do you do with the tomato plant residues?',
         choices: [
             {
-                text: 'Plant legumes like beans or peas.',
+                text: 'Chop them and leave them on the surface to decompose, or add to a compost pile.',
                 isCorrect: true,
-                feedback: 'Excellent rotation! Legumes are nitrogen-fixers; they will replenish the nitrogen that the leafy greens used up.',
-                action: 'plant_seeds'
+                feedback: 'Excellent! You\'re returning organic matter and nutrients back to the soil, completing the cycle and building fertility for next year.',
+                action: 'add_compost'
             },
             {
-                text: 'Plant more leafy greens.',
+                text: 'Pull everything out and burn it to prevent disease.',
                 isCorrect: false,
-                feedback: 'Planting the same crop repeatedly depletes specific nutrients and encourages pests and diseases.',
+                feedback: 'This is an extreme measure. You\'re removing all that valuable biomass and releasing carbon into the atmosphere. Only do this if there was a severe, non-compostable disease.',
                 action: 'fail_choice'
             }
         ]
       },
       {
         level: 6,
-        title: 'Final Harvest',
-        description: 'Thanks to your diligent soil management, your new crops are thriving.',
+        title: 'Sustainable Success',
+        description: 'Years of focusing on soil health have paid off. Your soil is dark, crumbly, and full of life. It holds water well and provides most of the nutrients your crops need.',
         choices: [
             {
-                text: 'Harvest your healthy crops.',
+                text: 'Continue the cycle of composting and cover cropping.',
                 isCorrect: true,
-                feedback: 'Success! Your focus on long-term soil health has resulted in a sustainable, productive farm.',
+                feedback: 'You have mastered the art of soil stewardship. This is the foundation of a truly resilient and productive organic farm.',
                 action: 'harvest'
             }
         ]
@@ -234,24 +255,36 @@ export const simFarmGames: Game[] = [
             feedback: 'Planting too deep can prevent seedlings from reaching the surface. They may not sprout.',
             action: 'plant_deep',
           },
+           {
+            text: 'Plant the seeds very close together to maximize space.',
+            isCorrect: false,
+            feedback: 'Overcrowding leads to intense competition for light, water, and nutrients, resulting in stunted plants.',
+            action: 'plant_crowded',
+          },
         ],
       },
       {
         level: 3,
         title: 'Watering',
-        description: 'Your seeds have been planted. How will you water them to encourage germination?',
+        description: 'Your seeds have sprouted. How will you water them to encourage strong root development?',
         choices: [
           {
-            text: 'Use a drip irrigation system for gentle, direct watering.',
+            text: 'Use a drip irrigation system for gentle, deep watering.',
             isCorrect: true,
-            feedback: 'Excellent! Drip irrigation is efficient and prevents seeds from washing away.',
+            feedback: 'Excellent! Drip irrigation is efficient and encourages roots to grow deep in search of water, making them more drought-resilient.',
             action: 'drip_irrigation',
           },
           {
             text: 'Flood the field to make sure they have plenty of water.',
             isCorrect: false,
-            feedback: 'Oh no! You\'ve waterlogged the soil. The crop has failed.',
+            feedback: 'Oh no! You\'ve waterlogged the soil and drowned the young seedlings. The crop has failed.',
             action: 'flood',
+          },
+          {
+            text: 'Lightly sprinkle with a hose every day.',
+            isCorrect: false,
+            feedback: 'This encourages shallow roots, making the plants weak and highly dependent on daily watering. They will suffer in dry conditions.',
+            action: 'set_health:-15',
           },
         ],
       },
@@ -261,16 +294,22 @@ export const simFarmGames: Game[] = [
         description: 'Your plants are growing, but so are weeds! What is the best organic approach?',
         choices: [
           {
-            text: 'Remove weeds carefully by hand.',
+            text: 'Apply a thick layer of straw mulch around the plants.',
             isCorrect: true,
-            feedback: 'Great work! Removing weeds reduces competition for nutrients and water.',
-            action: 'hand_weed',
+            feedback: 'Great strategy! Mulching smothers most weeds, conserves soil moisture, and keeps the soil cool.',
+            action: 'mulch:true',
           },
           {
             text: 'Apply a strong chemical herbicide.',
             isCorrect: false,
-            feedback: 'This is not organic! The chemicals have damaged your soil\'s health.',
+            feedback: 'This is not an organic method! The chemicals have damaged your soil\'s health and killed beneficial organisms.',
             action: 'use_chemicals',
+          },
+           {
+            text: 'Let the weeds grow; they provide ground cover.',
+            isCorrect: false,
+            feedback: 'The weeds are now out-competing your crop for water, sunlight, and nutrients. Your plants are stunted.',
+            action: 'set_weeds:true',
           },
         ],
       },
@@ -280,15 +319,15 @@ export const simFarmGames: Game[] = [
         description: 'You notice small holes in the leaves of your plants. What do you do first?',
         choices: [
           {
-            text: 'Inspect the plants closely to identify the pest.',
+            text: 'Inspect the plants closely (under leaves, on stems) to identify the pest.',
             isCorrect: true,
-            feedback: 'Correct. Proper identification is the first step to effective and targeted control.',
+            feedback: 'Correct. Proper identification is the first step to effective and targeted control. You find aphids.',
             action: 'set_pests:true',
           },
           {
             text: 'Spray a broad-spectrum organic pesticide immediately.',
             isCorrect: false,
-            feedback: 'This might kill the pest, but it could also harm beneficial insects. Identification is key.',
+            feedback: 'This might kill the pest, but it could also harm beneficial insects that could have controlled the pest naturally. It\'s better to identify first.',
             action: 'fail_choice',
           },
         ],
@@ -301,13 +340,13 @@ export const simFarmGames: Game[] = [
           {
             text: 'Introduce ladybugs, a natural predator.',
             isCorrect: true,
-            feedback: 'Excellent choice! The ladybugs will control the aphid population naturally.',
+            feedback: 'Excellent choice! The ladybugs are a biological control and will manage the aphid population without chemicals.',
             action: 'add_ladybugs',
           },
           {
             text: 'Ignore them. A few bugs won\'t hurt.',
             isCorrect: false,
-            feedback: 'The aphid population exploded, stunting your plants\' growth and reducing your final harvest.',
+            feedback: 'The aphid population exploded, stunting your plants\' growth and transmitting diseases. Your final harvest will be significantly reduced.',
             action: 'do_nothing_pests',
           },
         ],
@@ -318,23 +357,23 @@ export const simFarmGames: Game[] = [
         description: 'Your plants are beginning to flower. What do they need most at this stage?',
          choices: [
           {
-            text: 'Phosphorus (P) and Potassium (K) for flower and fruit development.',
+            text: 'A fertilizer higher in Phosphorus (P) and Potassium (K).',
             isCorrect: true,
-            feedback: 'Exactly! These nutrients are crucial for producing a strong harvest.',
+            feedback: 'Exactly! These nutrients are crucial for flower development and producing a strong harvest. You add some bone meal and kelp.',
             action: 'set_growth:4',
           },
           {
             text: 'A large dose of Nitrogen (N).',
             isCorrect: false,
-            feedback: 'Too much nitrogen at this stage encourages leafy growth at the expense of fruits and flowers.',
-            action: 'fail_choice',
+            feedback: 'Too much nitrogen at this stage encourages lots of leafy growth at the expense of fruits and flowers. Your plants are bushy but not productive.',
+            action: 'set_nutrients_n:100',
           },
         ],
       },
       {
         level: 8,
         title: 'Harvest',
-        description: 'Your crops are mature and ready for picking. What do you do?',
+        description: 'Your crops are mature and ready for picking. Your careful management has paid off.',
         choices: [
           {
             text: 'Harvest the crops.',
@@ -353,113 +392,144 @@ export const simFarmGames: Game[] = [
     levels: [
       {
         level: 1,
-        title: 'First Sign of Trouble',
+        title: 'Prevention: The First Line of Defense',
         description:
-          'You spot a few aphids on your plants. The infestation is small. What is your first response?',
+          'Before planting, you want to create a resilient garden. What is the most effective preventative strategy against pests?',
         choices: [
           {
-            text: 'Introduce beneficial ladybugs.',
+            text: 'Focus on building healthy, living soil.',
             isCorrect: true,
             feedback:
-              'A perfect, targeted solution! Ladybugs are natural predators and will control the aphid population.',
-            action: 'add_ladybugs',
+              'Correct! Healthy plants grown in healthy soil are far less susceptible to pests and diseases. This is the cornerstone of organic pest control.',
+            action: 'add_compost',
           },
           {
-            text: 'Immediately spray with chemical pesticides.',
+            text: 'Have a variety of chemical pesticides ready.',
             isCorrect: false,
             feedback:
-              'This is an overreaction and harms the environment and your soil. Soil health damaged.',
+              'This is a reactive, not preventative, approach. Relying on chemicals is not sustainable or organic.',
             action: 'use_chemicals',
+          },
+            {
+            text: 'Enclose the entire garden in fine mesh netting.',
+            isCorrect: false,
+            feedback:
+              'While this can work, it\'s expensive, labor-intensive, and prevents beneficial pollinating insects from reaching your crops.',
+            action: 'fail_choice',
           },
         ],
       },
       {
         level: 2,
         title: 'Companion Planting',
-        description: 'Now that the aphids are gone, how can you help prevent them from coming back?',
+        description: 'You are planting tomatoes. What can you plant alongside them to help repel pests like hornworms?',
         choices: [
             {
-                text: 'Plant marigolds and garlic nearby.',
+                text: 'Plant basil and marigolds around the tomatoes.',
                 isCorrect: true,
-                feedback: 'Excellent idea! These plants are known to naturally repel many pests, including aphids.',
-                action: 'set_growth:4'
+                feedback: 'Excellent! Basil is known to repel tomato hornworms and whiteflies, while marigolds deter nematodes and other pests. This is a classic companion planting combination.',
+                action: 'plant_seeds'
             },
             {
-                text: 'Do nothing, the ladybugs will handle it.',
+                text: 'Plant corn next to them.',
                 isCorrect: false,
-                feedback: 'While ladybugs help, proactive prevention is a core part of organic pest management.',
+                feedback: 'This is not an ideal pairing. Both are heavy feeders, and corn can attract other pests like corn earworms.',
+                action: 'fail_choice'
+            },
+            {
+                text: 'Plant more tomatoes to ensure some survive.',
+                isCorrect: false,
+                feedback: 'A monoculture is a magnet for pests. This lack of diversity will likely make your pest problem worse, not better.',
                 action: 'fail_choice'
             }
         ]
       },
       {
         level: 3,
-        title: 'A New Threat',
-        description: 'You notice a different kind of damage - large chunks eaten from leaves. You find a caterpillar.',
+        title: 'Aphid Infestation',
+        description: 'You find a cluster of aphids on your kale plants. The infestation is localized. What is your initial response?',
         choices: [
           {
-            text: 'Hand-pick the caterpillars off the plants.',
+            text: 'A strong jet of water from a hose.',
             isCorrect: true,
-            feedback: 'A simple but effective and completely organic solution for larger pests like caterpillars.',
+            feedback: 'Simple, effective, and free! For a small infestation, this is often enough to dislodge the aphids without harming beneficials.',
             action: 'set_pests:false'
           },
           {
-            text: 'Spray the whole crop with a strong pesticide.',
+            text: 'Spray with a homemade soap solution.',
+            isCorrect: true,
+            feedback: 'A good organic option. Insecticidal soap works by dissolving the aphid\'s outer protective layer. You proceed to the next challenge.',
+            action: 'set_pests:false'
+          },
+          {
+            text: 'Do nothing, it\'s just a few bugs.',
             isCorrect: false,
-            feedback: 'Again, this is an overreaction that harms beneficial insects and your soil.',
-            action: 'use_chemicals'
+            feedback: 'Aphids reproduce incredibly quickly. A small problem has now become a major infestation, and they are spreading to other plants.',
+            action: 'do_nothing_pests'
           }
         ]
       },
       {
         level: 4,
-        title: 'Fungal Foe',
-        description: 'After a few rainy days, you see a white, powdery substance on the leaves. It\'s powdery mildew.',
+        title: 'Beneficial Insects',
+        description: 'The aphid problem persists, though it is under control. How can you establish a long-term, natural solution?',
         choices: [
             {
-                text: 'Spray with a mix of milk and water.',
+                text: 'Plant flowers like alyssum and dill to attract ladybugs and lacewings.',
                 isCorrect: true,
-                feedback: 'A surprising but effective organic fungicide! The proteins in milk have an antiseptic effect.',
-                action: 'set_health:100'
+                feedback: 'Fantastic! You\'re creating a habitat for the natural predators of aphids. This "biological control" is a key to sustainable farming.',
+                action: 'add_beneficials:30'
             },
             {
-                text: 'Remove the affected leaves and hope for the best.',
+                text: 'Buy and release a box of ladybugs.',
                 isCorrect: false,
-                feedback: 'This might slow it down, but the fungal spores have likely already spread. The mildew continues to grow.',
-                action: 'do_nothing_pests'
-            }
-        ]
-      },
-      {
-        level: 5,
-        title: 'Attracting Pollinators',
-        description: 'Your plants are healthy. How can you ensure a good fruit yield?',
-        choices: [
-            {
-                text: 'Plant flowers like borage and lavender nearby.',
-                isCorrect: true,
-                feedback: 'Great! These flowers attract bees and other pollinators, which are essential for many crops to produce fruit.',
-                action: 'set_growth:5'
+                feedback: 'While this can provide a temporary fix, they will fly away if you don\'t have the right habitat (flowers, water) for them. Building a habitat is the better long-term strategy.',
+                action: 'add_beneficials:10'
             },
             {
-                text: 'The wind will take care of pollination.',
+                text: 'Continue spraying with soap every day.',
                 isCorrect: false,
-                feedback: 'While some plants are wind-pollinated, many require insects. Actively attracting them is a better strategy.',
+                feedback: 'While organic, constant spraying can still stress the plant and is a sign that your garden ecosystem is out of balance.',
                 action: 'fail_choice'
             }
         ]
       },
       {
+        level: 5,
+        title: 'Cabbage Worms',
+        description: 'You see beautiful white moths fluttering around your broccoli, and soon after, you find small green caterpillars eating the leaves.',
+        choices: [
+            {
+                text: 'Use a floating row cover over the broccoli at the start of the season.',
+                isCorrect: true,
+                feedback: 'Prevention is the best cure! A row cover acts as a physical barrier, preventing the moths from laying eggs on your plants in the first place.',
+                action: 'set_pests:false'
+            },
+            {
+                text: 'Spray with Bt (Bacillus thuringiensis).',
+                isCorrect: true,
+                feedback: 'A great organic choice. Bt is a naturally occurring bacteria that specifically targets caterpillars and is harmless to other insects, animals, and humans.',
+                action: 'set_pests:false'
+            },
+             {
+                text: 'Hand-pick the caterpillars off the plants.',
+                isCorrect: true,
+                feedback: 'Labor-intensive but 100% effective and organic if the infestation isn\'t too large. You get it under control.',
+                action: 'set_pests:false'
+            }
+        ]
+      },
+      {
         level: 6,
-        title: 'Harvest',
+        title: 'Ecosystem Harmony',
         description:
-          'Your integrated pest management strategy has worked! Your plants are healthy and ready for harvest.',
+          'Your garden is thriving. You see ladybugs, bees, and spiders. You find a few chewed leaves, but no major infestations.',
         choices: [
           {
-            text: 'Harvest the crops.',
+            text: 'Recognize this as a balanced ecosystem and continue monitoring.',
             isCorrect: true,
             feedback:
-              "Congratulations! You've protected your crops using a variety of eco-friendly methods.",
+              "Congratulations! You've achieved the ultimate goal of organic pest control: a resilient, balanced ecosystem where pests are kept in check naturally. A few pests are part of the system, providing food for beneficials.",
             action: 'harvest',
           },
         ],
@@ -473,113 +543,138 @@ export const simFarmGames: Game[] = [
     levels: [
       {
         level: 1,
-        title: 'Choose Your System',
+        title: 'System Selection',
         description:
-          'You need to irrigate your fields. Which system will you install for the most efficient water use?',
+          'You are setting up a new vegetable garden. Which irrigation system offers the highest water efficiency?',
         choices: [
           {
-            text: 'Install a drip irrigation system.',
+            text: 'Drip Irrigation system.',
             isCorrect: true,
             feedback:
-              'Excellent! Drip irrigation delivers water directly to the roots, saving a huge amount of water.',
+              'Correct! Drip irrigation minimizes evaporation and runoff by delivering water directly to the plant\'s root zone, often saving 30-50% more water than sprinklers.',
             action: 'drip_irrigation',
           },
           {
-            text: 'Use high-volume overhead sprinklers.',
+            text: 'Overhead Sprinkler system.',
             isCorrect: false,
             feedback:
-              'This method loses a lot of water to evaporation and is not very efficient.',
+              'This is inefficient. A significant amount of water is lost to evaporation, especially on windy or hot days, and it can promote fungal diseases on leaves.',
             action: 'sprinkler',
+          },
+           {
+            text: 'Hand watering with a hose and nozzle.',
+            isCorrect: false,
+            feedback:
+              'While it can be targeted, hand watering is often inconsistent, time-consuming, and can lead to shallow watering, which encourages weak root systems.',
+            action: 'set_water:40',
           },
         ],
       },
       {
         level: 2,
-        title: 'Watering Schedule',
-        description: 'Your drip system is in place. When is the best time to water your crops?',
+        title: 'Timing is Everything',
+        description: 'You have your drip system installed. When is the most effective time of day to run it?',
         choices: [
           {
-            text: 'Water early in the morning.',
+            text: 'Early morning (before 8 AM).',
             isCorrect: true,
-            feedback: 'Correct! Watering in the morning reduces evaporation and allows plants to absorb water before the heat of the day.',
-            action: 'set_water:70',
+            feedback: 'Perfect. Watering in the cool morning hours minimizes evaporation and allows the water to soak in deeply before the sun gets hot. This is the most efficient time.',
+            action: 'set_water:80',
           },
           {
-            text: 'Water in the middle of the hot, windy afternoon.',
+            text: 'Mid-day (12 PM - 2 PM).',
             isCorrect: false,
-            feedback: 'This is the worst time to water. Much of your water will evaporate before it reaches the plant roots.',
+            feedback: 'This is the worst time. Evaporation is at its peak, and water droplets on leaves can act like magnifying glasses, scorching the plants.',
             action: 'set_water:30',
+          },
+          {
+            text: 'Late evening (after 6 PM).',
+            isCorrect: false,
+            feedback: 'This is better than mid-day, but leaving foliage wet overnight can create the perfect environment for fungal diseases like powdery mildew to develop.',
+            action: 'set_health:-10',
           },
         ],
       },
       {
         level: 3,
-        title: 'Mulching',
-        description: 'It\'s getting hot and the ground is drying out quickly. How can you conserve soil moisture?',
+        title: 'Conserving Soil Moisture',
+        description: 'A heatwave is forecasted. How can you help your soil retain moisture and protect your plants?',
         choices: [
             {
-                text: 'Apply a layer of straw or wood chip mulch.',
+                text: 'Apply a 2-3 inch layer of organic mulch (straw, wood chips).',
                 isCorrect: true,
-                feedback: 'Perfect. Mulch acts like a blanket, keeping the soil cool and reducing water evaporation.',
-                action: 'mulch'
+                feedback: 'Excellent move. Mulch acts like a sponge, soaking up water and releasing it slowly. It also insulates the soil, keeping roots cool and drastically reducing evaporation.',
+                action: 'mulch:true'
             },
             {
-                text: 'Water more frequently.',
+                text: 'Just water more often.',
                 isCorrect: false,
-                feedback: 'This just uses more water and doesn\'t solve the underlying problem of evaporation.',
-                action: 'set_water:40'
+                feedback: 'This is a temporary solution that wastes water. Without addressing evaporation, you are fighting a losing battle and risk creating shallow-rooted plants.',
+                action: 'set_water:50'
+            },
+            {
+                text: 'Remove all surrounding plants to reduce competition.',
+                isCorrect: false,
+                feedback: 'This exposes more bare soil to the sun, increasing overall soil temperature and evaporation. A diversity of plants can create a more resilient microclimate.',
+                action: 'fail_choice'
             }
         ]
       },
       {
         level: 4,
-        title: 'Drought Conditions',
-        description: 'There has been no rain for weeks and water is being rationed. Your plants are starting to wilt.',
+        title: 'Reading the Plants',
+        description: 'It\'s been a few days since you last watered. How do you decide if it\'s time to water again?',
         choices: [
             {
-                text: 'Water deeply but less frequently.',
+                text: 'Check the soil moisture 2-4 inches below the surface.',
                 isCorrect: true,
-                feedback: 'This is the right strategy. It encourages plants to develop deeper roots, making them more resilient.',
+                feedback: 'This is the most reliable method. If the soil is dry at that depth, it\'s time to water. This ensures you are watering based on the plant\'s actual needs.',
                 action: 'set_water:60'
             },
             {
-                text: 'Give them a light sprinkle every day.',
+                text: 'Wait until the plants look wilted.',
                 isCorrect: false,
-                feedback: 'This encourages shallow roots, making the plants more vulnerable to drought in the long run.',
-                action: 'set_health:60'
+                feedback: 'Wilting is a sign of stress. While plants can recover, repeatedly waiting for this signal weakens them and reduces yield. It\'s better to be proactive.',
+                action: 'set_health:-20'
+            },
+            {
+                text: 'Stick to a strict schedule, like every other day.',
+                isCorrect: false,
+                feedback: 'A rigid schedule doesn\'t account for weather changes (rain, heatwaves) or the plant\'s life stage. It often leads to over or under-watering.',
+                action: 'fail_choice'
             }
         ]
       },
       {
         level: 5,
         title: 'Rainwater Harvesting',
-        description: 'The monsoon is coming. How can you prepare to take advantage of the rain?',
+        description: 'The monsoon season is approaching. How can you leverage this natural resource for future use?',
         choices: [
             {
-                text: 'Set up rain barrels and swales to capture and store rainwater.',
+                text: 'Install rain barrels connected to rooftops and build swales on contour in the garden.',
                 isCorrect: true,
-                feedback: 'Fantastic planning! Storing rainwater gives you a free, sustainable source of water for the dry season.',
+                feedback: 'Brilliant! You are now capturing and storing a free resource. Rain barrels provide stored water, and swales help rainwater infiltrate the soil slowly instead of running off.',
                 action: 'set_water:100'
             },
             {
-                text: 'Hope your fields get enough water.',
+                text: 'Ensure your drainage system quickly removes all rainwater.',
                 isCorrect: false,
-                feedback: 'This is a missed opportunity to capture a valuable resource for later use.',
+                feedback: 'You\'re treating a valuable resource as a waste product. Your goal should be to slow, spread, and sink rainwater into your landscape.',
                 action: 'fail_choice'
             }
         ]
       },
       {
         level: 6,
-        title: 'Harvest',
+        title: 'Water-Wise Harvest',
         description:
-          'By watering efficiently and planning ahead, you have conserved water and grown a healthy crop.',
+          'Your wise water management has paid off. Your plants are healthy and productive, and your water bill is low.',
         choices: [
           {
-            text: 'Harvest the crops.',
+            text: 'Harvest your bountiful, efficiently-grown crops.',
             isCorrect: true,
             feedback:
-              'Well done! Your smart water management has led to a successful harvest while conserving a precious resource.',
+              'Congratulations! You have demonstrated mastery of sustainable water management, a critical skill for any modern farmer.',
             action: 'harvest',
           },
         ],
