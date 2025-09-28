@@ -39,13 +39,62 @@ export type Game = {
 
 
 // SVG components for plant stages
-const Seed = () => <circle cx="12" cy="18" r="1" fill="saddlebrown" />;
-const Sprout = () => <path d="M12 18 C 11 16, 11 14, 12 12 M12 18 C 13 16, 13 14, 12 12 M10 12 C 10 10, 12 10, 12 12 M14 12 C 14 10, 12 10, 12 12" stroke="green" strokeWidth="1.5" fill="none" />;
-const Seedling = () => <g transform="translate(0 4)"><path d="M12 18 V 10 M10 12 l-4 -2 M14 12 l4 -2 M10 15 l-3 0 M14 15 l3 0" stroke="green" strokeWidth="1.5" fill="none" /></g>;
-const GrownPlant = () => <g transform="translate(0 2)"><path d="M12 18 V 6 M9 9 l-4 -2 M15 9 l4 -2 M9 12 l-5 0 M15 12 l5 0 M9 15 l-4 2 M15 15 l4 2" stroke="green" strokeWidth="1.5" fill="none" /></g>;
-const FruitingPlant = () => <g><path d="M12 18 V 6 M9 9 l-4 -2 M15 9 l4 -2 M9 12 l-5 0 M15 12 l5 0 M9 15 l-4 2 M15 15 l4 2" stroke="green" strokeWidth="1.5" fill="none" /><circle cx="8" cy="7" r="1.5" fill="orange" /><circle cx="16" cy="7" r="1.5" fill="orange" /><circle cx="10" cy="14" r="1.5" fill="orange" /></g>;
-const HarvestedPlant = () => <g><path d="M12 18 V 6 M9 9 l-4 -2 M15 9 l4 -2 M9 12 l-5 0 M15 12 l5 0 M9 15 l-4 2 M15 15 l4 2" stroke="darkkhaki" strokeWidth="1.5" fill="none" /></g>;
-const WitheredPlant = () => <path d="M12 18 C 10 16, 10 13, 11 11 C 12 9, 13 11, 13 11 M11 11 C 11.5 13, 12.5 13, 13 11" stroke="saddlebrown" strokeWidth="1.5" fill="none" />;
+const Seed = () => <circle cx="12" cy="18" r="1.5" fill="#5C3A21" />;
+const Sprout = () => (
+  <g>
+    <path d="M12 18 Q 11 15, 10 12" stroke="#34D399" strokeWidth="2" fill="none" strokeLinecap="round"/>
+    <path d="M10 12 C 8 11, 9 9, 10.5 10" stroke="#34D399" strokeWidth="1.5" fill="#34D399" />
+    <path d="M10 12 C 12 11, 11 9, 9.5 10" stroke="#34D399" strokeWidth="1.5" fill="#34D399" />
+  </g>
+);
+const Seedling = () => (
+  <g transform="translate(0 2)">
+    <path d="M12 18 V 10" stroke="#10B981" strokeWidth="2" fill="none" strokeLinecap="round"/>
+    <path d="M12 10 C 8 8, 10 4, 12 6" stroke="#10B981" strokeWidth="1.5" fill="#10B981" />
+    <path d="M12 10 C 16 8, 14 4, 12 6" stroke="#10B981" strokeWidth="1.5" fill="#10B981" />
+    <path d="M12 13 C 9 12, 9 10, 11 11" stroke="#10B981" strokeWidth="1.5" fill="#10B981" />
+    <path d="M12 13 C 15 12, 15 10, 13 11" stroke="#10B981" strokeWidth="1.5" fill="#10B981" />
+  </g>
+);
+const GrownPlant = () => (
+  <g transform="translate(0 -2)">
+    <path d="M12 18 V 6" stroke="#059669" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
+    {/* Branch left */}
+    <path d="M12 15 C 10 15, 9 13, 8 11" stroke="#059669" strokeWidth="2" fill="none" />
+    <path d="M8 11 C 6 10, 7 8, 8.5 9" stroke="#059669" strokeWidth="1.5" fill="#10B981" />
+    <path d="M8 11 C 10 10, 9 8, 7.5 9" stroke="#059669" strokeWidth="1.5" fill="#10B981" />
+    {/* Branch right */}
+    <path d="M12 12 C 14 12, 15 10, 16 8" stroke="#059669" strokeWidth="2" fill="none" />
+    <path d="M16 8 C 14 7, 15 5, 16.5 6" stroke="#059669" strokeWidth="1.5" fill="#10B981" />
+    <path d="M16 8 C 18 7, 17 5, 15.5 6" stroke="#059669" strokeWidth="1.5" fill="#10B981" />
+    {/* Main top leaves */}
+    <path d="M12 6 C 8 4, 10 0, 12 2" stroke="#059669" strokeWidth="1.5" fill="#10B981" />
+    <path d="M12 6 C 16 4, 14 0, 12 2" stroke="#059669" strokeWidth="1.5" fill="#10B981" />
+  </g>
+);
+const FruitingPlant = () => (
+  <g>
+    <GrownPlant />
+    <circle cx="7" cy="8" r="2" fill="#F59E0B" stroke="#D97706" strokeWidth="0.5"/>
+    <circle cx="17" cy="5" r="2" fill="#F59E0B" stroke="#D97706" strokeWidth="0.5"/>
+    <circle cx="11" cy="14" r="2" fill="#F59E0B" stroke="#D97706" strokeWidth="0.5"/>
+  </g>
+);
+const HarvestedPlant = () => (
+  <g>
+    <path d="M12 18 V 8" stroke="#A16207" strokeWidth="2" fill="none" strokeLinecap="round" />
+    <path d="M12 14 L 8 13" stroke="#A16207" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+    <path d="M12 11 L 15 10" stroke="#A16207" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+  </g>
+);
+const WitheredPlant = () => (
+  <g transform="scale(0.9) translate(1, 2)">
+    <path d="M12 18 C 10 15, 10 12, 11 10" stroke="#78350F" strokeWidth="1.5" fill="none" />
+    <path d="M11 10 C 12 8, 13 10, 13 10" stroke="#78350F" strokeWidth="1.5" fill="none" />
+    <path d="M11 14 C 9 13, 8 12, 9 11" stroke="#78350F" strokeWidth="1" fill="none" />
+    <path d="M13 12 C 15 11, 15 10, 14 9" stroke="#78350F" strokeWidth="1" fill="none" />
+  </g>
+);
 
 
 function GamePlayer({ game, onBack }: { game: Game; onBack: () => void }) {
