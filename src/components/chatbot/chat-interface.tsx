@@ -15,7 +15,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { cn } from '@/lib/utils';
-import { Bot, Send, User, Mic, Paperclip, X } from 'lucide-react';
+import { Bot, Send, User, Mic, Paperclip, X, Volume2 } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
@@ -41,12 +41,15 @@ export function ChatInterface() {
   const [loading, setLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [speakingMessageId, setSpeakingMessageId] = useState<string | null>(null);
+
 
   const { toast } = useToast();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatbotLogo = PlaceHolderImages.find((p) => p.id === 'chatbot-logo');
   const recognitionRef = useRef<any>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -78,6 +81,22 @@ export function ChatInterface() {
       };
     }
   }, [toast, uploadedImage]);
+  
+  useEffect(() => {
+    const synth = window.speechSynthesis;
+    const utterance = utteranceRef.current;
+    if (!utterance) return;
+    
+    const onEnd = () => setSpeakingMessageId(null);
+    utterance.addEventListener('end', onEnd);
+    
+    return () => {
+      utterance.removeEventListener('end', onEnd);
+      if (synth.speaking) {
+         synth.cancel();
+      }
+    }
+  }, [utteranceRef.current]);
 
 
   const handleSend = async (textToSend?: string, imageToSend?: string | null) => {
@@ -151,6 +170,35 @@ export function ChatInterface() {
       reader.readAsDataURL(file);
     }
   };
+  
+  const handleReadAloud = (message: Message) => {
+    const synth = window.speechSynthesis;
+    if (!synth) {
+      toast({ title: 'Not Supported', description: 'Text-to-speech is not supported in your browser.', variant: 'destructive'});
+      return;
+    }
+
+    if (speakingMessageId === message.id) {
+      synth.cancel();
+      setSpeakingMessageId(null);
+      return;
+    }
+
+    if (synth.speaking) {
+      synth.cancel();
+    }
+    
+    const utterance = new SpeechSynthesisUtterance(message.text);
+    utteranceRef.current = utterance;
+    
+    // Simple language mapping
+    if (language === 'Hindi') utterance.lang = 'hi-IN';
+    if (language === 'Nepali') utterance.lang = 'ne-NP';
+    else utterance.lang = 'en-US';
+
+    setSpeakingMessageId(message.id);
+    synth.speak(utterance);
+  }
 
 
   return (
@@ -188,6 +236,11 @@ export function ChatInterface() {
                     <Image src={message.imageUrl} alt="User upload" width={200} height={200} className="rounded-md mb-2"/>
                 )}
                 <p className="text-sm">{message.text}</p>
+                 {message.sender === 'ai' && (
+                  <Button variant="ghost" size="icon" className="h-7 w-7 mt-2" onClick={() => handleReadAloud(message)}>
+                    <Volume2 className={cn("h-4 w-4", speakingMessageId === message.id && "text-primary animate-pulse")} />
+                  </Button>
+                )}
               </div>
             </div>
           ))}
