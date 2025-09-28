@@ -5,10 +5,7 @@ import { Bot, Gamepad2, ScanLine, Store, Trophy, Leaf, Sparkles } from 'lucide-r
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { cn } from '@/lib/utils';
-
 
 const features = [
   {
@@ -61,60 +58,26 @@ const features = [
   },
 ];
 
-const featureImages = [
-    {
-      id: 'field_scan_hero',
-      description: 'A farmer inspecting a crop in a field',
-      imageUrl: 'https://images.unsplash.com/photo-1599138900450-3d06e89ad309?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxmYXJtJTIwZmllbGR8ZW58MHx8fHwxNzU4OTQ1MjM5fDA&ixlib=rb-4.1.0&q=80&w=1080',
-      imageHint: 'farm field',
-    },
-    {
-      id: 'sikkim-farm',
-      description: 'Sikkim terraced farms',
-      imageUrl: 'https://images.unsplash.com/photo-1598230752589-32d3b0542387?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzaWNraW0lMjBmYXJtfGVufDB8fHx8MTc1OTM5MTQ1OXww&ixlib=rb-4.1.0&q=80&w=1080',
-      imageHint: 'Sikkim farm',
-    },
-    {
-      id: 'organic-crops',
-      description: 'Organic crops growing',
-      imageUrl: 'https://images.unsplash.com/photo-1597992921303-348e8a6a683e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxvcmdhbmljJTIwY3JvcHN8ZW58MHx8fHwxNzU5MzkxNDU5fDA&ixlib=rb-4.1.0&q=80&w=1080',
-      imageHint: 'organic crops',
-    },
-    {
-        id: 'farmer-smiling',
-        description: 'A happy farmer in a field',
-        imageUrl: 'https://images.unsplash.com/photo-1620403724391-4993d0d55a30?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxpbmRpYW4lMjBmYXJtZXJ8ZW58MHx8fHwxNzU5MjU2MTE3fDA&ixlib=rb-4.1.0&q=80&w=1080',
-        imageHint: 'happy farmer',
-    }
-];
+const heroImage = {
+  id: 'sikkim-farm',
+  description: 'Sikkim terraced farms',
+  imageUrl: 'https://images.unsplash.com/photo-1598230752589-32d3b0542387?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzaWNraW0lMjBmYXJtfGVufDB8fHx8MTc1OTM5MTQ1OXww&ixlib=rb-4.1.0&q=80&w=1080',
+  imageHint: 'Sikkim farm',
+};
+
 
 export default function FeaturesPage() {
-  const [currentImage, setCurrentImage] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentImage((prev) => (prev + 1) % featureImages.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, []);
-
   return (
     <div className="bg-cream">
       <section className="relative h-[60vh] min-h-[400px] w-full">
-         {featureImages.map((image, index) => (
-            <Image
-            key={image.id}
-            src={image.imageUrl}
-            alt={image.description}
-            data-ai-hint={image.imageHint}
-            fill
-            className={cn(
-                'object-cover transition-opacity duration-1000',
-                currentImage === index ? 'opacity-100' : 'opacity-0'
-            )}
-            priority={index === 0}
-            />
-        ))}
+        <Image
+          src={heroImage.imageUrl}
+          alt={heroImage.description}
+          data-ai-hint={heroImage.imageHint}
+          fill
+          className={'object-cover'}
+          priority
+        />
         <div className="absolute inset-0 bg-black/50" />
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white">
             <div className="container mx-auto px-4">
