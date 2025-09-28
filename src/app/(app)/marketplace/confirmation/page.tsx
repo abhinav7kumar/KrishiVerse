@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { CheckCircle, Package, ArrowLeft } from 'lucide-react';
+import { CheckCircle, Package, ArrowLeft, Calendar, Home } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -16,6 +16,13 @@ type CartItem = {
   quantity: number;
 };
 
+type ShippingInfo = {
+  name: string;
+  address: string;
+  phone: string;
+  deliveryOption: string;
+};
+
 type OrderDetails = {
   orderId: string;
   items: CartItem[];
@@ -23,6 +30,8 @@ type OrderDetails = {
   deliveryCharge: number;
   tax: number;
   total: number;
+  shippingInfo: ShippingInfo;
+  estimatedDeliveryDate: string;
 };
 
 export default function ConfirmationPage() {
@@ -37,8 +46,6 @@ export default function ConfirmationPage() {
       if (parsedOrder.orderId === orderId) {
         setOrderDetails(parsedOrder);
       }
-      // Clean up session storage after retrieving the data
-      // sessionStorage.removeItem('latestOrder');
     }
   }, [orderId]);
 
@@ -61,6 +68,7 @@ export default function ConfirmationPage() {
           </div>
           
           {orderDetails && (
+            <div className='space-y-4'>
             <Card className="bg-muted/50">
               <CardHeader>
                 <CardTitle className="text-lg">Order Summary</CardTitle>
@@ -69,7 +77,7 @@ export default function ConfirmationPage() {
                 {orderDetails.items.map(item => (
                   <div key={item.id} className="flex justify-between text-sm">
                     <span>{item.name} x {item.quantity}</span>
-                    <span>Rs {(item.priceValue * item.quantity).toFixed(2)}</span>
+                    <span className="font-medium">Rs {(item.priceValue * item.quantity).toFixed(2)}</span>
                   </div>
                 ))}
                 <Separator />
@@ -92,12 +100,36 @@ export default function ConfirmationPage() {
                 </div>
               </CardContent>
             </Card>
+
+            <Card className="bg-muted/50">
+              <CardHeader>
+                <CardTitle className="text-lg">Delivery Details</CardTitle>
+              </CardHeader>
+               <CardContent className="space-y-2 text-sm">
+                 <div className="flex items-start gap-2">
+                   <Home className="h-5 w-5 text-muted-foreground mt-0.5" />
+                   <div>
+                      <p className="font-semibold">{orderDetails.shippingInfo.name}</p>
+                      <p className="text-muted-foreground">{orderDetails.shippingInfo.address}</p>
+                      <p className="text-muted-foreground">{orderDetails.shippingInfo.phone}</p>
+                   </div>
+                 </div>
+                 <Separator />
+                 <div className="flex items-center gap-2">
+                   <Calendar className="h-5 w-5 text-muted-foreground" />
+                   <div>
+                    <p className="font-semibold">Estimated Delivery</p>
+                    <p className="text-muted-foreground">{orderDetails.estimatedDeliveryDate}</p>
+                   </div>
+                 </div>
+               </CardContent>
+            </Card>
+            </div>
           )}
 
           <div className="text-center space-y-2">
-            <h4 className="font-semibold">Next Steps:</h4>
-            <p className="text-muted-foreground">
-              You will receive an SMS confirmation shortly with your delivery details. You can track your order status from the "My Orders" page.
+            <p className="text-sm text-muted-foreground">
+              You will receive an SMS confirmation shortly. You can track your order status from the "My Orders" page.
             </p>
           </div>
           <div className="flex justify-center gap-4">

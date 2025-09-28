@@ -35,6 +35,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
+import { addDays, format } from 'date-fns';
 
 const checkoutSchema = z.object({
   name: z.string().min(2, 'Name is too short'),
@@ -54,6 +55,7 @@ export default function CheckoutPage() {
   const deliveryCharge = subtotal > 0 ? 50 : 0;
   const tax = subtotal * 0.05; // 5% tax
   const total = subtotal + deliveryCharge + tax;
+  const estimatedDeliveryDate = format(addDays(new Date(), 3), 'MMMM dd, yyyy');
 
   const form = useForm<CheckoutFormValues>({
     resolver: zodResolver(checkoutSchema),
@@ -76,6 +78,7 @@ export default function CheckoutPage() {
       tax,
       total,
       shippingInfo: data,
+      estimatedDeliveryDate,
     };
     
     // In a real app, this would redirect to Razorpay
