@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -90,13 +91,13 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader>
-        <div className="flex items-center gap-2">
+        <Link href="/dashboard" className="flex items-center gap-2">
           <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
             <Logo className="size-5" />
           </div>
           <span className="font-headline text-xl text-primary">KrishiVerse</span>
-          <SidebarTrigger className="ml-auto" />
-        </div>
+        </Link>
+        <SidebarTrigger className="ml-auto" />
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
