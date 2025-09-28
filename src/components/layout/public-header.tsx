@@ -7,9 +7,9 @@ import { Menu } from 'lucide-react';
 import Link from 'next/link';
 
 const navLinks = [
-  { name: 'Features', href: '#features' },
-  { name: 'About', href: '#' },
-  { name: 'Contact', href: '#' },
+  { name: 'Features', href: '/#features' },
+  { name: 'About', href: '/about' },
+  { name: 'Contact', href: '/contact' },
 ];
 
 export function PublicHeader() {
