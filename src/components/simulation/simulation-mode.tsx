@@ -307,7 +307,7 @@ export function SimulationMode() {
             <Button
               key={game.id}
               variant="outline"
-              className="h-auto flex-col items-start p-4 text-left"
+              className="h-auto flex-col items-start p-4 text-left hover:bg-accent hover:text-accent-foreground"
               onClick={() => setSelectedGame(game)}
             >
               <p className="font-semibold text-primary flex items-center gap-2">
