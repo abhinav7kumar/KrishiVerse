@@ -55,12 +55,12 @@ export function Hero() {
         />
       ))}
       <div className="absolute inset-0 bg-black/50" />
-      <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white">
-        <div className="container mx-auto px-4">
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white p-4">
+        <div className="container mx-auto">
           <h1 className="font-headline text-4xl font-bold drop-shadow-md sm:text-5xl md:text-6xl lg:text-7xl">
             Grow Smart. Grow Green. 🌱
           </h1>
-          <p className="mt-4 max-w-3xl text-lg text-white/90 drop-shadow-sm md:text-xl">
+          <p className="mt-4 max-w-3xl mx-auto text-lg text-white/90 drop-shadow-sm md:text-xl">
             Sikkim’s AI-powered platform for sustainable farming and organic
             produce.
           </p>

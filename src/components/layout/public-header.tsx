@@ -16,7 +16,7 @@ export function PublicHeader() {
   return (
     <header className="sticky top-0 z-50 bg-white/80 py-3 shadow-sm backdrop-blur-md">
       <div className="container mx-auto flex items-center justify-between px-4">
-        <Link href="/" className="flex items-center gap-2">
+        <Link href="/login" className="flex items-center gap-2">
           <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
             <Logo className="size-5" />
           </div>
