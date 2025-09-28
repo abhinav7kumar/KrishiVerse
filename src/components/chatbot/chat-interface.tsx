@@ -30,7 +30,7 @@ export function ChatInterface() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'init',
-      text: "Hello! I am your AI Agronomist. How can I help you today? You can ask me about organic pesticides, sowing dates, or government subsidies.",
+      text: "Hello! I am your AI Chatbot. How can I help you today? You can ask me about organic pesticides, sowing dates, or government subsidies.",
       sender: 'ai',
     },
   ]);

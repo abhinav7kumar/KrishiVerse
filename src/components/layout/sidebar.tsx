@@ -39,7 +39,7 @@ const navItems = [
   },
   {
     href: '/chatbot',
-    label: 'AI Agronomist',
+    label: 'AI Chatbot',
     icon: Bot,
     tooltip: 'Chat with AI',
   },

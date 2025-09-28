@@ -21,7 +21,7 @@ import { usePathname } from 'next/navigation';
 const pathToTitle: Record<string, string> = {
   '/dashboard': 'Dashboard',
   '/scan': 'AR Farm Scan',
-  '/chatbot': 'AI Agronomist Chat',
+  '/chatbot': 'AI Chatbot',
   '/leaderboard': 'Village Leaderboards',
   '/marketplace': 'Sustainable Marketplace',
   '/simulation': 'Farming Simulator',
