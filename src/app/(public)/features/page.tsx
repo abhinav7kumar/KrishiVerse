@@ -5,7 +5,6 @@ import { Bot, Gamepad2, ScanLine, Store, Trophy, Leaf, Sparkles } from 'lucide-r
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
@@ -63,7 +62,12 @@ const features = [
 ];
 
 const featureImages = [
-    PlaceHolderImages.find((p) => p.id === 'field_scan')!,
+    {
+      id: 'field_scan_hero',
+      description: 'A farmer inspecting a crop in a field',
+      imageUrl: 'https://images.unsplash.com/photo-1599138900450-3d06e89ad309?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxmYXJtJTIwZmllbGR8ZW58MHx8fHwxNzU4OTQ1MjM5fDA&ixlib=rb-4.1.0&q=80&w=1080',
+      imageHint: 'farm field',
+    },
     {
       id: 'sikkim-farm',
       description: 'Sikkim terraced farms',
