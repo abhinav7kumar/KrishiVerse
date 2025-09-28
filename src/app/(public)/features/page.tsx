@@ -76,6 +76,12 @@ const featureImages = [
       imageUrl: 'https://images.unsplash.com/photo-1597992921303-348e8a6a683e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxvcmdhbmljJTIwY3JvcHN8ZW58MHx8fHwxNzU5MzkxNDU5fDA&ixlib=rb-4.1.0&q=80&w=1080',
       imageHint: 'organic crops',
     },
+    {
+        id: 'farmer-smiling',
+        description: 'A happy farmer in a field',
+        imageUrl: 'https://images.unsplash.com/photo-1620403724391-4993d0d55a30?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxpbmRpYW4lMjBmYXJtZXJ8ZW58MHx8fHwxNzU5MjU2MTE3fDA&ixlib=rb-4.1.0&q=80&w=1080',
+        imageHint: 'happy farmer',
+    }
 ];
 
 export default function FeaturesPage() {
