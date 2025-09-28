@@ -13,8 +13,10 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { cn } from '@/lib/utils';
 import { Bot, Send, User } from 'lucide-react';
+import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { Logo } from '../icons';
 
@@ -30,7 +32,7 @@ export function ChatInterface() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'init',
-      text: "Hello! I am your AI Chatbot. How can I help you today? You can ask me about organic pesticides, sowing dates, or government subsidies.",
+      text: 'Hello! I am your AI Chatbot. How can I help you today? You can ask me about organic pesticides, sowing dates, or government subsidies.',
       sender: 'ai',
     },
   ]);
@@ -39,6 +41,7 @@ export function ChatInterface() {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatbotLogo = PlaceHolderImages.find((p) => p.id === 'chatbot-logo');
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -49,7 +52,11 @@ export function ChatInterface() {
   const handleSend = async () => {
     if (input.trim() === '' || loading) return;
 
-    const userMessage: Message = { id: Date.now().toString(), text: input, sender: 'user' };
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      text: input,
+      sender: 'user',
+    };
     setMessages((prev) => [...prev, userMessage]);
     setInput('');
     setLoading(true);
@@ -93,12 +100,14 @@ export function ChatInterface() {
               )}
             >
               <Avatar>
+                {message.sender === 'ai' && chatbotLogo ? (
+                  <AvatarImage
+                    src={chatbotLogo.imageUrl}
+                    alt={chatbotLogo.description}
+                  />
+                ) : null}
                 <AvatarFallback>
-                  {message.sender === 'ai' ? (
-                    <Logo className='text-primary'/>
-                  ) : (
-                    <User />
-                  )}
+                  {message.sender === 'ai' ? <Bot /> : <User />}
                 </AvatarFallback>
               </Avatar>
               <div
@@ -114,27 +123,37 @@ export function ChatInterface() {
             </div>
           ))}
           {loading && (
-             <div className='flex items-start gap-3 flex-row'>
-                <Avatar>
-                    <AvatarFallback>
-                        <Logo className='text-primary animate-pulse'/>
-                    </AvatarFallback>
-                </Avatar>
-                <div className='bg-muted rounded-lg p-3'>
-                    <div className="flex items-center space-x-1">
-                        <div className="h-2 w-2 animate-bounce rounded-full bg-primary [animation-delay:-0.3s]"></div>
-                        <div className="h-2 w-2 animate-bounce rounded-full bg-primary [animation-delay:-0.15s]"></div>
-                        <div className="h-2 w-2 animate-bounce rounded-full bg-primary"></div>
-                    </div>
+            <div className="flex items-start gap-3 flex-row">
+              <Avatar>
+                {chatbotLogo ? (
+                  <AvatarImage
+                    src={chatbotLogo.imageUrl}
+                    alt={chatbotLogo.description}
+                    className="animate-pulse"
+                  />
+                ) : null}
+                <AvatarFallback>
+                  <Bot className="text-primary animate-pulse" />
+                </AvatarFallback>
+              </Avatar>
+              <div className="bg-muted rounded-lg p-3">
+                <div className="flex items-center space-x-1">
+                  <div className="h-2 w-2 animate-bounce rounded-full bg-primary [animation-delay:-0.3s]"></div>
+                  <div className="h-2 w-2 animate-bounce rounded-full bg-primary [animation-delay:-0.15s]"></div>
+                  <div className="h-2 w-2 animate-bounce rounded-full bg-primary"></div>
                 </div>
-             </div>
+              </div>
+            </div>
           )}
           <div ref={messagesEndRef} />
         </div>
       </div>
       <div className="border-t p-4">
         <div className="flex items-center gap-2">
-          <Select value={language} onValueChange={(v) => setLanguage(v as Language)}>
+          <Select
+            value={language}
+            onValueChange={(v) => setLanguage(v as Language)}
+          >
             <SelectTrigger className="w-[120px]">
               <SelectValue placeholder="Language" />
             </SelectTrigger>

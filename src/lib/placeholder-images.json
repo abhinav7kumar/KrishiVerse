@@ -41,6 +41,12 @@
       "description": "A placeholder image for a field scan",
       "imageUrl": "https://images.unsplash.com/photo-1599138900450-3d06e89ad309?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxmYXJtJTIwZmllbGR8ZW58MHx8fHwxNzU4OTQ1MjM5fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "farm field"
+    },
+    {
+      "id": "chatbot-logo",
+      "description": "The logo for the AI Chatbot",
+      "imageUrl": "https://storage.googleapis.com/aif-us-public-content/app-maker/user_project_11p054z6y0yq8s2y6ztfsvdczg6m/image_1759247653609.png",
+      "imageHint": "chatbot robot"
     }
   ]
 }
