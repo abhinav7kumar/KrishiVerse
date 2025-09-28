@@ -1,3 +1,4 @@
+
 'use client';
 
 import { answerAgronomyQuestions } from '@/ai/flows/answer-agronomy-questions';
@@ -43,13 +44,11 @@ export function ChatInterface() {
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [speakingMessageId, setSpeakingMessageId] = useState<string | null>(null);
 
-
   const { toast } = useToast();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatbotLogo = PlaceHolderImages.find((p) => p.id === 'chatbot-logo');
   const recognitionRef = useRef<any>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -82,21 +81,15 @@ export function ChatInterface() {
     }
   }, [toast, uploadedImage]);
   
+  // Cleanup speech synthesis on component unmount
   useEffect(() => {
     const synth = window.speechSynthesis;
-    const utterance = utteranceRef.current;
-    if (!utterance) return;
-    
-    const onEnd = () => setSpeakingMessageId(null);
-    utterance.addEventListener('end', onEnd);
-    
     return () => {
-      utterance.removeEventListener('end', onEnd);
       if (synth.speaking) {
          synth.cancel();
       }
     }
-  }, [utteranceRef.current]);
+  }, []);
 
 
   const handleSend = async (textToSend?: string, imageToSend?: string | null) => {
@@ -189,11 +182,14 @@ export function ChatInterface() {
     }
     
     const utterance = new SpeechSynthesisUtterance(message.text);
-    utteranceRef.current = utterance;
     
+    utterance.onend = () => {
+      setSpeakingMessageId(null);
+    };
+
     // Simple language mapping
     if (language === 'Hindi') utterance.lang = 'hi-IN';
-    if (language === 'Nepali') utterance.lang = 'ne-NP';
+    else if (language === 'Nepali') utterance.lang = 'ne-NP';
     else utterance.lang = 'en-US';
 
     setSpeakingMessageId(message.id);
