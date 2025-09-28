@@ -8,6 +8,8 @@ import {
 } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 import type { LucideIcon } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 export type Farmer = {
   rank: number;
@@ -15,6 +17,7 @@ export type Farmer = {
   village: string;
   xp: number;
   badge?: LucideIcon;
+  id: string;
 };
 
 type LeaderboardTableProps = {
@@ -31,32 +34,36 @@ export function LeaderboardTable({ farmers }: LeaderboardTableProps) {
             <TableHead>Farmer</TableHead>
             <TableHead>Village</TableHead>
             <TableHead className="text-right">XP</TableHead>
-            <TableHead className="w-[100px] text-center">Badge</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {farmers.map((farmer) => (
-            <TableRow
-              key={farmer.rank}
-              className={cn(farmer.rank <= 3 && 'bg-secondary/10')}
-            >
-              <TableCell className="text-center font-bold text-lg">
-                {farmer.rank}
-              </TableCell>
-              <TableCell className="font-medium">{farmer.name}</TableCell>
-              <TableCell className="text-muted-foreground">
-                {farmer.village}
-              </TableCell>
-              <TableCell className="text-right font-semibold text-primary">
-                {farmer.xp}
-              </TableCell>
-              <TableCell className="text-center">
-                {farmer.badge && (
-                  <farmer.badge className="mx-auto h-6 w-6 text-secondary" />
-                )}
-              </TableCell>
-            </TableRow>
-          ))}
+          {farmers.map((farmer) => {
+            const avatar = PlaceHolderImages.find((p) => p.id === farmer.id);
+            return (
+              <TableRow key={farmer.rank}>
+                <TableCell className="text-center font-bold text-lg text-muted-foreground">
+                  {farmer.rank}
+                </TableCell>
+                <TableCell className="font-medium">
+                  <div className="flex items-center gap-3">
+                    <Avatar className="h-9 w-9">
+                      <AvatarImage src={avatar?.imageUrl} alt={farmer.name} />
+                      <AvatarFallback>
+                        {farmer.name.charAt(0)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span>{farmer.name}</span>
+                  </div>
+                </TableCell>
+                <TableCell className="text-muted-foreground">
+                  {farmer.village}
+                </TableCell>
+                <TableCell className="text-right font-semibold text-primary">
+                  {farmer.xp}
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </div>

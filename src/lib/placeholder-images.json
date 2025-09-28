@@ -83,6 +83,48 @@
       "description": "The logo for the AI Chatbot",
       "imageUrl": "https://storage.googleapis.com/aif-us-public-content/app-maker/user_project_11p054z6y0yq8s2y6ztfsvdczg6m/image_1759247653609.png",
       "imageHint": "chatbot robot"
+    },
+    {
+      "id": "aarav",
+      "description": "Avatar for Aarav Sharma",
+      "imageUrl": "https://images.unsplash.com/photo-1598556149495-d9589a13a522?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjBmYXJtZXJ8ZW58MHx8fHwxNzU5MjU2MTE3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "indian farmer"
+    },
+    {
+      "id": "priya",
+      "description": "Avatar for Priya Gurung",
+      "imageUrl": "https://images.unsplash.com/photo-1620392189998-c6899a4c84ed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxpbmRpYW4lMjBmYXJtZXIlMjB3b21hbnxlbnwwfHx8fDE3NTkyNTYxMTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "indian farmer"
+    },
+    {
+      "id": "rohan",
+      "description": "Avatar for Rohan Tamang",
+      "imageUrl": "https://images.unsplash.com/photo-1620403724127-243e8d21b333?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxpbmRpYW4lMjBmYXJtZXJ8ZW58MHx8fHwxNzU5MjU2MTE3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "indian farmer"
+    },
+    {
+      "id": "anika",
+      "description": "Avatar for Anika Rai",
+      "imageUrl": "https://images.unsplash.com/photo-1626423026330-c35860714777?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxpbmRpYW4lMjBmYXJtZXIlMjB3b21hbnxlbnwwfHx8fDE3NTkyNTYxMTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "indian farmer"
+    },
+    {
+      "id": "vikram",
+      "description": "Avatar for Vikram Chettri",
+      "imageUrl": "https://images.unsplash.com/photo-1620403724391-4993d0d55a30?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxpbmRpYW4lMjBmYXJtZXJ8ZW58MHx8fHwxNzU5MjU2MTE3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "indian farmer"
+    },
+    {
+      "id": "sunita",
+      "description": "Avatar for Sunita Limbu",
+      "imageUrl": "https://images.unsplash.com/photo-1626423026330-c35860714777?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxpbmRpYW4lMjBmYXJtZXIlMjB3b21hbnxlbnwwfHx8fDE3NTkyNTYxMTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "indian farmer"
+    },
+    {
+      "id": "rajesh",
+      "description": "Avatar for Rajesh Bhutia",
+      "imageUrl": "https://images.unsplash.com/photo-1620403724391-4993d0d55a30?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxpbmRpYW4lMjBmYXJtZXJ8ZW58MHx8fHwxNzU5MjU2MTE3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "indian farmer"
     }
   ]
 }

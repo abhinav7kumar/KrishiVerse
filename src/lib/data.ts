@@ -46,6 +46,7 @@ export const missions: Mission[] = [
 
 export const leaderboardData: Farmer[] = [
   {
+    id: 'aarav',
     rank: 1,
     name: 'Aarav Sharma',
     village: 'Namchi',
@@ -53,6 +54,7 @@ export const leaderboardData: Farmer[] = [
     badge: Award,
   },
   {
+    id: 'priya',
     rank: 2,
     name: 'Priya Gurung',
     village: 'Gyalshing',
@@ -60,6 +62,7 @@ export const leaderboardData: Farmer[] = [
     badge: Shield,
   },
   {
+    id: 'rohan',
     rank: 3,
     name: 'Rohan Tamang',
     village: 'Mangan',
@@ -67,16 +70,32 @@ export const leaderboardData: Farmer[] = [
     badge: Leaf,
   },
   {
+    id: 'anika',
     rank: 4,
     name: 'Anika Rai',
     village: 'Soreng',
     xp: 980,
   },
   {
+    id: 'vikram',
     rank: 5,
     name: 'Vikram Chettri',
     village: 'Pakyong',
     xp: 950,
+  },
+  {
+    id: 'sunita',
+    rank: 6,
+    name: 'Sunita Limbu',
+    village: 'Namchi',
+    xp: 890,
+  },
+  {
+    id: 'rajesh',
+    rank: 7,
+    name: 'Rajesh Bhutia',
+    village: 'Gyalshing',
+    xp: 820,
   },
 ];
 
