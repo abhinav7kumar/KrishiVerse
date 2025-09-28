@@ -1,3 +1,46 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "tomatoes",
+      "description": "Fresh organic tomatoes",
+      "imageUrl": "https://images.unsplash.com/photo-1673533512857-65b33e8dc8b5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx0b21hdG9lcyUyMHByb2R1Y2V8ZW58MHx8fHwxNzU5MDQwNjY4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "tomatoes produce"
+    },
+    {
+      "id": "carrots",
+      "description": "Crisp garden carrots",
+      "imageUrl": "https://images.unsplash.com/photo-1636846528194-315c5ad70d4b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxjYXJyb3RzJTIwdmVnZXRhYmxlfGVufDB8fHx8MTc1OTAwNDYyMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "carrots vegetable"
+    },
+    {
+      "id": "lettuce",
+      "description": "Green leaf lettuce",
+      "imageUrl": "https://images.unsplash.com/photo-1598998255396-9c0289d33304?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxsZXR0dWNlJTIwZ3JlZW5zfGVufDB8fHx8MTc1OTA0MDY2OHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "lettuce greens"
+    },
+    {
+      "id": "broccoli",
+      "description": "Organic broccoli heads",
+      "imageUrl": "https://images.unsplash.com/photo-1757332334626-8dadb145540d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxicm9jY29saSUyMHZlZ2V0YWJsZXxlbnwwfHx8fDE3NTkwNDA2Njh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "broccoli vegetable"
+    },
+    {
+      "id": "potatoes",
+      "description": "Sikkim new potatoes",
+      "imageUrl": "https://images.unsplash.com/photo-1688043046229-fe8bc88f8b99?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxwb3RhdG9lcyUyMHZlZ2V0YWJsZXxlbnwwfHx8fDE3NTg5OTI1OTJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "potatoes vegetable"
+    },
+    {
+      "id": "corn",
+      "description": "Sweet corn on the cob",
+      "imageUrl": "https://images.unsplash.com/photo-1571646302210-db7990b30751?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxjb3JuJTIwdmVnZXRhYmxlfGVufDB8fHx8MTc1OTA0MDY2OHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "corn vegetable"
+    },
+    {
+      "id": "field_scan",
+      "description": "A placeholder image for a field scan",
+      "imageUrl": "https://images.unsplash.com/photo-1599138900450-3d06e89ad309?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxmYXJtJTIwZmllbGR8ZW58MHx8fHwxNzU4OTQ1MjM5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "farm field"
+    }
+  ]
 }
