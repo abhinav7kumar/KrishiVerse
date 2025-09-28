@@ -76,117 +76,168 @@ export const marketplaceProduce: Produce[] = [
 
 export const simFarmGames: Game[] = [
   {
+    id: 'soil-health',
+    title: 'Soil Health Sim',
+    description: 'Discover how to build and maintain rich, healthy soil for your crops.',
+    levels: [
+      {
+        level: 1,
+        title: 'Stage 1: Assess Your Soil',
+        description:
+          'You\'re starting with a new plot of land. The soil looks compacted and lifeless. What is your first action to improve it?',
+        choices: [
+          {
+            text: 'Add a thick layer of compost.',
+            isCorrect: true,
+            feedback:
+              'Excellent choice! Compost is the best way to introduce organic matter, improve structure, and feed soil life.',
+            action: 'add_compost',
+          },
+          {
+            text: 'Till the soil aggressively.',
+            isCorrect: false,
+            feedback:
+              'This can break up compaction temporarily but destroys the soil\'s natural structure and can lead to more problems.',
+            action: 'till_soil',
+          },
+          {
+            text: 'Do nothing and plant right away.',
+            isCorrect: false,
+            feedback: 'Planting in poor soil will lead to stunted growth and a disappointing harvest. Preparation is key!',
+            action: 'do_nothing_soil',
+          },
+        ],
+      },
+      {
+        level: 2,
+        title: 'Stage 2: Planting',
+        description:
+          'Your soil is now rich with compost. It\'s time to plant. How do you proceed?',
+        choices: [
+          {
+            text: 'Plant seeds at the appropriate depth and spacing.',
+            isCorrect: true,
+            feedback:
+              'Perfect! Giving seeds the right conditions from the start helps ensure healthy germination and growth.',
+            action: 'plant_seeds',
+          },
+          {
+            text: 'Scatter all the seeds close together to save space.',
+            isCorrect: false,
+            feedback:
+              'This will cause overcrowding, and your plants will struggle to get enough nutrients and sunlight, withering away.',
+            action: 'plant_crowded',
+          },
+        ],
+      },
+      {
+        level: 3,
+        title: 'Stage 3: Harvest',
+        description:
+          'Thanks to your healthy soil, the plants have thrived. It\'s time to harvest your crops.',
+        choices: [
+          {
+            text: 'Harvest the crops.',
+            isCorrect: true,
+            feedback:
+              'Congratulations! Your focus on soil health has paid off with a bountiful, healthy harvest.',
+            action: 'harvest',
+          },
+        ],
+      },
+    ],
+  },
+  {
     id: 'crop-growth',
     title: 'Crop Growth Cycle',
     description: 'Learn the 5 stages of growing a healthy crop, from seed to harvest.',
     levels: [
       {
         level: 1,
-        title: 'Level 1: Seed Selection',
-        description: 'You are starting a new season. Which seeds will you choose for your land?',
+        title: 'Stage 1: Soil Preparation',
+        description: 'You are starting a new season. Your soil is unprepared. What is your first step?',
         choices: [
           {
-            text: 'Certified organic seeds from a reputable local supplier.',
+            text: 'Prepare the soil by adding compost.',
             isCorrect: true,
-            feedback: 'Great start! Certified seeds ensure quality and are adapted to local conditions.',
+            feedback: 'Great start! Healthy soil is the foundation of healthy plants.',
+            action: 'add_compost',
           },
           {
-            text: 'Cheaper, uncertified seeds from an unknown online store.',
+            text: 'Till the soil until it is fine dust.',
             isCorrect: false,
-            feedback: 'Risky choice. Uncertified seeds may have poor germination rates or carry diseases.',
-          },
-          {
-            text: 'Last year\'s leftover seeds stored in a damp shed.',
-            isCorrect: false,
-            feedback: 'Poor storage can ruin seeds. It\'s best to start with fresh, properly stored ones.',
+            feedback: 'Over-tilling destroys soil structure and can lead to erosion. The soil becomes damaged.',
+            action: 'till_soil',
           },
         ],
       },
       {
         level: 2,
-        title: 'Level 2: Planting',
-        description: 'It\'s time to plant your seeds. What\'s the best method?',
+        title: 'Stage 2: Planting',
+        description: 'Your soil is ready. How will you plant your certified organic seeds?',
         choices: [
           {
-            text: 'Plant seeds at the correct depth and spacing according to the seed packet.',
+            text: 'Plant at the correct depth and spacing.',
             isCorrect: true,
-            feedback: 'Perfect! Proper spacing and depth give each plant the room and resources it needs to thrive.',
+            feedback: 'Perfect! This gives each plant the room and resources it needs to thrive.',
+            action: 'plant_seeds',
           },
           {
-            text: 'Scatter all the seeds in one area to save time.',
+            text: 'Plant the seeds much deeper than recommended to "protect" them.',
             isCorrect: false,
-            feedback: 'This will cause overcrowding. Plants will compete for sunlight, water, and nutrients, leading to a poor harvest.',
-          },
-          {
-            text: 'Plant the seeds much deeper than recommended to protect them.',
-            isCorrect: false,
-            feedback: 'Planting too deep can prevent seedlings from reaching the surface and sunlight.',
+            feedback: 'Planting too deep can prevent seedlings from reaching the surface. They may not sprout.',
+            action: 'plant_deep',
           },
         ],
       },
       {
         level: 3,
-        title: 'Level 3: Germination & Watering',
-        description: 'Your seeds have sprouted! How will you water them?',
+        title: 'Stage 3: Watering',
+        description: 'Your seeds have been planted. How will you water them to encourage germination?',
         choices: [
           {
-            text: 'Water deeply but infrequently, allowing the soil to dry slightly between waterings.',
+            text: 'Use a drip irrigation system for gentle, direct watering.',
             isCorrect: true,
-            feedback: 'Correct! This encourages deep root growth and makes plants more drought-resistant.',
+            feedback: 'Excellent choice. Drip irrigation is efficient and prevents seeds from washing away. Your seeds have sprouted!',
+            action: 'drip_irrigation',
           },
           {
-            text: 'Water them a little bit every day.',
+            text: 'Flood the field to make sure they have plenty of water.',
             isCorrect: false,
-            feedback: 'Frequent, shallow watering can lead to weak, shallow roots.',
-          },
-          {
-            text: 'Flood the field with as much water as possible.',
-            isCorrect: false,
-            feedback: 'Overwatering can drown the roots and lead to rot and disease.',
+            feedback: 'Oh no! You\'ve washed away the seeds and waterlogged the soil. The crop has failed.',
+            action: 'flood',
           },
         ],
       },
       {
         level: 4,
-        title: 'Level 4: Growth & Care',
-        description: 'Your plants are growing, but so are some weeds. What do you do?',
+        title: 'Stage 4: Weed Control',
+        description: 'Your plants are growing, but so are weeds! What is the best organic approach?',
         choices: [
           {
-            text: 'Remove weeds by hand or with a hoe.',
+            text: 'Remove weeds carefully by hand.',
             isCorrect: true,
-            feedback: 'Excellent organic practice! Removing weeds reduces competition for resources.',
+            feedback: 'Great work! Removing weeds reduces competition for nutrients and water, allowing your crop to flourish.',
+            action: 'hand_weed',
           },
           {
-            text: 'Apply a chemical weed killer.',
+            text: 'Apply a strong chemical herbicide.',
             isCorrect: false,
-            feedback: 'Chemical herbicides are not permitted in organic farming and can harm your soil.',
-          },
-          {
-            text: 'Let the weeds grow; they are also plants.',
-            isCorrect: false,
-            feedback: 'Weeds will steal vital nutrients, water, and sunlight from your crops, reducing your yield.',
+            feedback: 'This is not organic! The chemicals have damaged your soil\'s health.',
+            action: 'use_chemicals',
           },
         ],
       },
       {
         level: 5,
-        title: 'Level 5: Harvest',
-        description: 'Your crops are ready! When is the best time to harvest?',
+        title: 'Stage 5: Harvest',
+        description: 'Your crops are mature and ready for picking. What do you do?',
         choices: [
           {
-            text: 'Harvest in the early morning when vegetables are cool and crisp.',
+            text: 'Harvest the crops.',
             isCorrect: true,
-            feedback: 'You\'ve done it! Harvesting at the right time ensures the best flavor and shelf life. Congratulations on a successful season!',
-          },
-          {
-            text: 'Harvest in the middle of a hot day.',
-            isCorrect: false,
-            feedback: 'Harvesting in heat can cause produce to wilt and lose quality.',
-          },
-          {
-            text: 'Wait another month to see if they get bigger.',
-            isCorrect: false,
-            feedback: 'Waiting too long can result in overripe, woody, or bitter produce.',
+            feedback: 'Success! You have successfully managed the crop from seed to harvest using sustainable practices.',
+            action: 'harvest',
           },
         ],
       },
@@ -195,28 +246,49 @@ export const simFarmGames: Game[] = [
   {
     id: 'pest-control',
     title: 'Pest Control Challenge',
-    description: 'Test your knowledge of organic pest control methods.',
+    description: 'Practice identifying and managing common pests with organic methods.',
     levels: [
       {
         level: 1,
-        title: 'Pest Invasion!',
+        title: 'Stage 1: First Sign of Trouble',
         description:
-          'You notice small, yellow insects on the underside of your tomato plant leaves. They seem to be multiplying quickly. What is your first organic-approved action?',
+          'You spot a few aphids on your plants. The infestation is small. What is your first, proportional response?',
         choices: [
           {
-            text: 'Spray with a strong chemical pesticide.',
-            isCorrect: false,
-            feedback: 'Incorrect. Chemical pesticides are not allowed in organic farming and can harm beneficial insects.',
-          },
-          {
-            text: 'Introduce ladybugs to the area.',
+            text: 'Introduce beneficial ladybugs.',
             isCorrect: true,
-            feedback: 'Excellent choice! Ladybugs are natural predators of aphids and a great organic pest control method.',
+            feedback:
+              'A perfect, targeted solution! Ladybugs are natural predators and will control the aphid population without chemicals.',
+            action: 'add_ladybugs',
           },
           {
-            text: 'Ignore them and hope they go away.',
+            text: 'Immediately spray with chemical pesticides.',
             isCorrect: false,
-            feedback: 'Not a good idea. Pests can quickly destroy a crop if left unchecked.',
+            feedback:
+              'This is an overreaction for a small problem and harms the environment and your soil.',
+            action: 'use_chemicals',
+          },
+          {
+            text: 'Do nothing; it\'s only a few bugs.',
+            isCorrect: false,
+            feedback:
+              'A small problem can quickly become a big one. The pests have multiplied, and your plant\'s growth is stunted.',
+            action: 'do_nothing_pests',
+          },
+        ],
+      },
+      {
+        level: 2,
+        title: 'Stage 2: Harvest',
+        description:
+          'Thanks to your quick action with the ladybugs, your plants are healthy and pest-free.',
+        choices: [
+          {
+            text: 'Harvest the crops.',
+            isCorrect: true,
+            feedback:
+              'Congratulations! You\'ve successfully protected your crops using an eco-friendly method.',
+            action: 'harvest',
           },
         ],
       },
@@ -225,56 +297,61 @@ export const simFarmGames: Game[] = [
   {
     id: 'water-management',
     title: 'Water Management',
-    description: 'Learn how to use water efficiently on your farm.',
+    description: 'Learn to use water wisely to conserve resources and grow healthy plants.',
     levels: [
       {
         level: 1,
-        title: 'Choosing an Irrigation System',
-        description: 'You need to set up irrigation for your vegetable beds. Which system is most water-efficient?',
+        title: 'Stage 1: Choose Your System',
+        description:
+          'You need to irrigate your fields. Which system will you install for the most efficient water use?',
         choices: [
           {
-            text: 'Drip irrigation system.',
+            text: 'Install a drip irrigation system.',
             isCorrect: true,
-            feedback: 'Correct! Drip irrigation delivers water directly to the plant roots, minimizing evaporation and saving water.',
+            feedback:
+              'Excellent! Drip irrigation delivers water directly to the roots, saving a huge amount of water compared to other methods.',
+            action: 'drip_irrigation',
           },
           {
-            text: 'Overhead sprinklers.',
+            text: 'Use high-volume overhead sprinklers.',
             isCorrect: false,
-            feedback: 'Sprinklers can lose a lot of water to evaporation, especially on windy or hot days.',
-          },
-          {
-            text: 'Watering by hand with a hose without a nozzle.',
-            isCorrect: false,
-            feedback: 'This method is often inefficient and can lead to overwatering or underwatering.',
+            feedback:
+              'This method loses a lot of water to evaporation and is not very efficient. Your water level is lower than it could be.',
+            action: 'sprinkler',
           },
         ],
       },
-    ],
-  },
-  {
-    id: 'soil-health',
-    title: 'Soil Health Sim',
-    description: 'Discover how to build and maintain rich, healthy soil.',
-    levels: [
       {
-        level: 1,
-        title: 'Improving Soil Structure',
-        description: 'Your soil is hard and compacted. What is the best organic method to improve it for planting?',
+        level: 2,
+        title: 'Stage 2: Watering Schedule',
+        description: 'Your drip system is in place. When is the best time to water your crops?',
         choices: [
           {
-            text: 'Add compost and other organic matter.',
+            text: 'Water early in the morning.',
             isCorrect: true,
-            feedback: 'Exactly! Compost improves soil structure, aeration, and nutrient content, making it a superfood for your soil.',
+            feedback: 'Correct! Watering in the morning reduces evaporation and allows the plants to absorb water before the heat of the day.',
+            action: 'drip_irrigation',
           },
           {
-            text: 'Till the soil repeatedly until it is a fine powder.',
+            text: 'Water in the middle of the hot, windy afternoon.',
             isCorrect: false,
-            feedback: 'Over-tilling can destroy soil structure and lead to erosion.',
+            feedback: 'This is the worst time to water. Much of your water will evaporate before it even reaches the plant roots.',
+            action: 'fail_choice',
           },
+        ],
+      },
+      {
+        level: 3,
+        title: 'Stage 3: Harvest',
+        description:
+          'By watering efficiently, you have conserved water and grown a healthy crop.',
+        choices: [
           {
-            text: 'Add sand to the soil.',
-            isCorrect: false,
-            feedback: 'Adding sand to clay soil without enough organic matter can create a concrete-like substance. Compost is the key.',
+            text: 'Harvest the crops.',
+            isCorrect: true,
+            feedback:
+              'Well done! Your smart water management has led to a successful harvest while conserving a precious resource.',
+            action: 'harvest',
           },
         ],
       },
