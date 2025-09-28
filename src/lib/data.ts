@@ -64,10 +64,10 @@ export const leaderboardData: Farmer[] = [
 ];
 
 export const marketplaceProduce: Produce[] = [
-  { id: 'tomatoes', name: 'Organic Tomatoes', price: '₹120/kg' },
-  { id: 'carrots', name: 'Garden Carrots', price: '₹80/kg' },
-  { id: 'lettuce', name: 'Green Leaf Lettuce', price: '₹150/kg' },
-  { id: 'broccoli', name: 'Fresh Broccoli', price: '₹180/kg' },
-  { id: 'potatoes', name: 'Sikkim Potatoes', price: '₹60/kg' },
-  { id: 'corn', name: 'Sweet Corn', price: '₹90/kg' },
+  { id: 'tomatoes', name: 'Organic Tomatoes', price: 'Rs 120/kg' },
+  { id: 'carrots', name: 'Garden Carrots', price: 'Rs 80/kg' },
+  { id: 'lettuce', name: 'Green Leaf Lettuce', price: 'Rs 150/kg' },
+  { id: 'broccoli', name: 'Fresh Broccoli', price: 'Rs 180/kg' },
+  { id: 'potatoes', name: 'Sikkim Potatoes', price: 'Rs 60/kg' },
+  { id: 'corn', name: 'Sweet Corn', price: 'Rs 90/kg' },
 ];
