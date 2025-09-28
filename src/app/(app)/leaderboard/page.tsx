@@ -1,3 +1,5 @@
+'use client';
+
 import { LeaderboardTable } from '@/components/leaderboard/leaderboard-table';
 import { TopThree } from '@/components/leaderboard/top-three';
 import {
