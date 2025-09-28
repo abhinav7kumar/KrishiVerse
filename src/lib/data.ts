@@ -1279,3 +1279,173 @@ export const simFarmGames: Game[] = [
     ],
   },
 ];
+
+export type OrderItem = {
+  name: string;
+  quantity: number;
+};
+
+export type OrderStatus = 'Pending' | 'Shipped' | 'Delivered' | 'Cancelled';
+
+export type TrackingEvent = {
+  status: string;
+  date: string;
+  location: string;
+  isCompleted: boolean;
+};
+
+export type Order = {
+  id: string;
+  date: string;
+  items: OrderItem[];
+  total: number;
+  status: OrderStatus;
+  trackingHistory: TrackingEvent[];
+};
+
+export const mockOrders: Order[] = [
+  {
+    id: 'KV-1688556230987',
+    date: 'July 5, 2024',
+    items: [
+      { name: 'Organic Tomatoes', quantity: 2 },
+      { name: 'Hand Spade', quantity: 1 },
+    ],
+    total: 590.0,
+    status: 'Delivered',
+    trackingHistory: [
+      {
+        status: 'Order Confirmed',
+        date: 'July 5, 2024, 10:00 AM',
+        location: 'Gangtok Warehouse',
+        isCompleted: true,
+      },
+      {
+        status: 'Packaged',
+        date: 'July 5, 2024, 12:30 PM',
+        location: 'Gangtok Warehouse',
+        isCompleted: true,
+      },
+      {
+        status: 'Shipped',
+        date: 'July 5, 2024, 4:00 PM',
+        location: 'Gangtok Hub',
+        isCompleted: true,
+      },
+      {
+        status: 'Out for Delivery',
+        date: 'July 6, 2024, 9:00 AM',
+        location: 'Namchi, Sikkim',
+        isCompleted: true,
+      },
+      {
+        status: 'Delivered',
+        date: 'July 6, 2024, 1:00 PM',
+        location: 'Namchi, Sikkim',
+        isCompleted: true,
+      },
+    ],
+  },
+  {
+    id: 'KV-1688469830987',
+    date: 'July 4, 2024',
+    items: [{ name: 'Organic Compost', quantity: 3 }],
+    total: 750.0,
+    status: 'Shipped',
+    trackingHistory: [
+      {
+        status: 'Order Confirmed',
+        date: 'July 4, 2024, 11:00 AM',
+        location: 'Gangtok Warehouse',
+        isCompleted: true,
+      },
+      {
+        status: 'Packaged',
+        date: 'July 4, 2024, 1:00 PM',
+        location: 'Gangtok Warehouse',
+        isCompleted: true,
+      },
+      {
+        status: 'Shipped',
+        date: 'July 4, 2024, 5:00 PM',
+        location: 'Gangtok Hub',
+        isCompleted: true,
+      },
+      {
+        status: 'Out for Delivery',
+        date: 'July 5, 2024',
+        location: 'Gyalshing, Sikkim',
+        isCompleted: false,
+      },
+      {
+        status: 'Delivered',
+        date: 'July 5, 2024',
+        location: 'Gyalshing, Sikkim',
+        isCompleted: false,
+      },
+    ],
+  },
+  {
+    id: 'KV-1688383430987',
+    date: 'July 3, 2024',
+    items: [
+      { name: 'Sikkim Oranges', quantity: 5 },
+      { name: 'Garden Rake', quantity: 1 },
+    ],
+    total: 1000.0,
+    status: 'Pending',
+    trackingHistory: [
+      {
+        status: 'Order Confirmed',
+        date: 'July 3, 2024, 2:00 PM',
+        location: 'Gangtok Warehouse',
+        isCompleted: true,
+      },
+      {
+        status: 'Packaged',
+        date: '',
+        location: '',
+        isCompleted: false,
+      },
+      {
+        status: 'Shipped',
+        date: '',
+        location: '',
+        isCompleted: false,
+      },
+      {
+        status: 'Out for Delivery',
+        date: '',
+        location: '',
+        isCompleted: false,
+      },
+      {
+        status: 'Delivered',
+        date: '',
+        location: '',
+        isCompleted: false,
+      },
+    ],
+  },
+  {
+    id: 'KV-1688297030987',
+    date: 'July 2, 2024',
+    items: [{ name: 'Himalayan Apples', quantity: 2 }],
+    total: 400.0,
+    status: 'Cancelled',
+    trackingHistory: [
+       {
+        status: 'Order Confirmed',
+        date: 'July 2, 2024, 9:00 AM',
+        location: 'Gangtok Warehouse',
+        isCompleted: true,
+      },
+      {
+        status: 'Cancelled',
+        date: 'July 2, 2024, 11:00 AM',
+        location: 'Gangtok Warehouse',
+        isCompleted: true,
+      },
+    ],
+  },
+];

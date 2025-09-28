@@ -16,8 +16,9 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCart } from '@/context/cart-context';
 import { Badge } from '../ui/badge';
+import { useMemo } from 'react';
 
-const pathToTitle: Record<string, string> = {
+const baseTitleMap: Record<string, string> = {
   '/dashboard': 'Dashboard',
   '/scan': 'AR Farm Scan',
   '/chatbot': 'AI Chatbot',
@@ -32,9 +33,16 @@ const pathToTitle: Record<string, string> = {
 
 export function Header() {
   const pathname = usePathname();
-  const title = pathToTitle[pathname] || 'KrishiVerse';
   const { cart } = useCart();
   const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+  const title = useMemo(() => {
+    if (pathname.startsWith('/marketplace/orders/')) {
+      const orderId = pathname.split('/').pop();
+      return `Track Order: ${orderId}`;
+    }
+    return baseTitleMap[pathname] || 'KrishiVerse';
+  }, [pathname]);
 
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-sm md:px-6">

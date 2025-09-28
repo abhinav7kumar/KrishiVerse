@@ -1,6 +1,7 @@
 'use client';
 
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -22,59 +23,17 @@ import {
   TabsList,
   TabsTrigger,
 } from '@/components/ui/tabs';
+import { mockOrders, type Order } from '@/lib/data';
 import { cn } from '@/lib/utils';
-import { History, PackageCheck, PackageX, Truck } from 'lucide-react';
+import {
+  History,
+  PackageCheck,
+  PackageX,
+  Truck,
+  Eye,
+} from 'lucide-react';
+import Link from 'next/link';
 import { useState } from 'react';
-
-type OrderItem = {
-  name: string;
-  quantity: number;
-};
-
-type Order = {
-  id: string;
-  date: string;
-  items: OrderItem[];
-  total: number;
-  status: 'Pending' | 'Shipped' | 'Delivered' | 'Cancelled';
-};
-
-const mockOrders: Order[] = [
-  {
-    id: 'KV-1688556230987',
-    date: 'July 5, 2024',
-    items: [
-      { name: 'Organic Tomatoes', quantity: 2 },
-      { name: 'Hand Spade', quantity: 1 },
-    ],
-    total: 590.0,
-    status: 'Delivered',
-  },
-  {
-    id: 'KV-1688469830987',
-    date: 'July 4, 2024',
-    items: [{ name: 'Organic Compost', quantity: 3 }],
-    total: 750.0,
-    status: 'Shipped',
-  },
-  {
-    id: 'KV-1688383430987',
-    date: 'July 3, 2024',
-    items: [
-      { name: 'Sikkim Oranges', quantity: 5 },
-      { name: 'Garden Rake', quantity: 1 },
-    ],
-    total: 1000.0,
-    status: 'Pending',
-  },
-  {
-    id: 'KV-1688297030987',
-    date: 'July 2, 2024',
-    items: [{ name: 'Himalayan Apples', quantity: 2 }],
-    total: 400.0,
-    status: 'Cancelled',
-  },
-];
 
 export default function OrdersPage() {
   const [orders] = useState<Order[]>(mockOrders);
@@ -113,6 +72,7 @@ export default function OrdersPage() {
             <TableHead>Items</TableHead>
             <TableHead>Status</TableHead>
             <TableHead className="text-right">Total</TableHead>
+            <TableHead className="text-center">Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -120,7 +80,12 @@ export default function OrdersPage() {
             ordersToShow.map((order) => (
               <TableRow key={order.id}>
                 <TableCell className="font-medium text-primary">
-                  {order.id}
+                  <Link
+                    href={`/marketplace/orders/${order.id}`}
+                    className="hover:underline"
+                  >
+                    {order.id}
+                  </Link>
                 </TableCell>
                 <TableCell>{order.date}</TableCell>
                 <TableCell>
@@ -141,11 +106,18 @@ export default function OrdersPage() {
                 <TableCell className="text-right font-semibold">
                   Rs {order.total.toFixed(2)}
                 </TableCell>
+                <TableCell className="text-center">
+                  <Button asChild variant="ghost" size="icon">
+                    <Link href={`/marketplace/orders/${order.id}`}>
+                      <Eye className="h-5 w-5 text-muted-foreground" />
+                    </Link>
+                  </Button>
+                </TableCell>
               </TableRow>
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={5} className="h-24 text-center">
+              <TableCell colSpan={6} className="h-24 text-center">
                 No orders found.
               </TableCell>
             </TableRow>

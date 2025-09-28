@@ -9,6 +9,7 @@ import {
   ScanLine,
   ShoppingCart,
   Trophy,
+  Truck,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -71,6 +72,7 @@ const navItems = [
     label: 'My Orders',
     icon: History,
     isSubItem: true,
+    exactMatch: true,
   },
   {
     href: '/simulation',
@@ -98,40 +100,40 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
-          {navItems.map((item) => (
-            <SidebarMenuItem key={item.label}>
-              <Link href={item.href} passHref>
-                <SidebarMenuButton
-                  as="a"
-                  isActive={
-                    item.isGroup
-                      ? pathname.startsWith(item.href)
-                      : pathname === item.href
-                  }
-                  tooltip={
-                    item.tooltip
-                      ? {
-                          children: item.tooltip,
-                          className: 'font-body',
-                        }
-                      : undefined
-                  }
-                >
-                  <item.icon />
-                  <span
-                    className={cn(
-                      pathname.startsWith(item.href) && 'font-bold'
-                    )}
+          {navItems.map((item) => {
+            const isActive = item.exactMatch
+              ? pathname === item.href
+              : pathname.startsWith(item.href);
+
+            return (
+              <SidebarMenuItem key={item.label}>
+                <Link href={item.href} passHref>
+                  <SidebarMenuButton
+                    as="a"
+                    isActive={isActive}
+                    tooltip={
+                      item.tooltip
+                        ? {
+                            children: item.tooltip,
+                            className: 'font-body',
+                          }
+                        : undefined
+                    }
                   >
-                    {item.label}
-                  </span>
-                  {item.hasBadge && cartItemCount > 0 && (
-                    <Badge className="ml-auto" variant="secondary">{cartItemCount}</Badge>
-                  )}
-                </SidebarMenuButton>
-              </Link>
-            </SidebarMenuItem>
-          ))}
+                    <item.icon />
+                    <span className={cn(isActive && 'font-bold')}>
+                      {item.label}
+                    </span>
+                    {item.hasBadge && cartItemCount > 0 && (
+                      <Badge className="ml-auto" variant="secondary">
+                        {cartItemCount}
+                      </Badge>
+                    )}
+                  </SidebarMenuButton>
+                </Link>
+              </SidebarMenuItem>
+            );
+          })}
         </SidebarMenu>
       </SidebarContent>
     </Sidebar>
