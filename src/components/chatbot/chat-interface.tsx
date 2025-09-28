@@ -15,15 +15,15 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { cn } from '@/lib/utils';
-import { Bot, Send, User } from 'lucide-react';
+import { Bot, Send, User, Mic, Paperclip, X } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
-import { Logo } from '../icons';
 
 type Message = {
   id: string;
   text: string;
   sender: 'user' | 'ai';
+  imageUrl?: string;
 };
 
 type Language = 'Nepali' | 'Hindi' | 'English';
@@ -39,30 +39,70 @@ export function ChatInterface() {
   const [input, setInput] = useState('');
   const [language, setLanguage] = useState<Language>('English');
   const [loading, setLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+
   const { toast } = useToast();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatbotLogo = PlaceHolderImages.find((p) => p.id === 'chatbot-logo');
+  const recognitionRef = useRef<any>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   useEffect(scrollToBottom, [messages]);
+  
+  useEffect(() => {
+    // @ts-ignore
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = false;
+      recognitionRef.current.interimResults = false;
+      recognitionRef.current.lang = 'en-US';
 
-  const handleSend = async () => {
-    if (input.trim() === '' || loading) return;
+      recognitionRef.current.onresult = (event: any) => {
+        const spokenText = event.results[0][0].transcript;
+        setInput(spokenText);
+        setIsListening(false);
+        // Automatically send after speech recognized
+        handleSend(spokenText, uploadedImage); 
+      };
+
+      recognitionRef.current.onerror = (event: any) => {
+        console.error('Speech recognition error', event.error);
+        toast({ title: 'Voice Error', description: 'Could not recognize speech. Please try again.', variant: 'destructive'});
+        setIsListening(false);
+      };
+    }
+  }, [toast, uploadedImage]);
+
+
+  const handleSend = async (textToSend?: string, imageToSend?: string | null) => {
+    const currentInput = textToSend || input;
+    const currentImage = imageToSend === undefined ? uploadedImage : imageToSend;
+    
+    if (currentInput.trim() === '' || loading) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
-      text: input,
+      text: currentInput,
       sender: 'user',
+      imageUrl: currentImage || undefined,
     };
     setMessages((prev) => [...prev, userMessage]);
     setInput('');
+    setUploadedImage(null);
     setLoading(true);
 
     try {
-      const result = await answerAgronomyQuestions({ query: input, language });
+      const result = await answerAgronomyQuestions({
+        query: currentInput,
+        language,
+        photoDataUri: currentImage || undefined,
+      });
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
         text: result.answer,
@@ -86,6 +126,32 @@ export function ChatInterface() {
       setLoading(false);
     }
   };
+  
+  const handleMicClick = () => {
+    if (!recognitionRef.current) {
+      toast({ title: 'Not Supported', description: 'Voice input is not supported in your browser.', variant: 'destructive' });
+      return;
+    }
+    if (isListening) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    } else {
+      recognitionRef.current.start();
+      setIsListening(true);
+    }
+  };
+  
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setUploadedImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
 
   return (
     <Card className="flex h-full flex-col">
@@ -118,6 +184,9 @@ export function ChatInterface() {
                     : 'bg-muted'
                 )}
               >
+                {message.imageUrl && (
+                    <Image src={message.imageUrl} alt="User upload" width={200} height={200} className="rounded-md mb-2"/>
+                )}
                 <p className="text-sm">{message.text}</p>
               </div>
             </div>
@@ -149,6 +218,14 @@ export function ChatInterface() {
         </div>
       </div>
       <div className="border-t p-4">
+        {uploadedImage && (
+          <div className="relative mb-2 w-fit">
+            <Image src={uploadedImage} alt="Preview" width={80} height={80} className="rounded-md" />
+            <Button variant="ghost" size="icon" className="absolute -right-2 -top-2 h-6 w-6 rounded-full bg-muted-foreground/50 text-white" onClick={() => setUploadedImage(null)}>
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
         <div className="flex items-center gap-2">
           <Select
             value={language}
@@ -167,10 +244,17 @@ export function ChatInterface() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-            placeholder="Ask a question..."
-            disabled={loading}
+            placeholder={isListening ? "Listening..." : "Ask a question..."}
+            disabled={loading || isListening}
           />
-          <Button onClick={handleSend} disabled={loading}>
+          <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept="image/*" />
+          <Button variant="ghost" size="icon" onClick={() => fileInputRef.current?.click()} disabled={loading}>
+            <Paperclip />
+          </Button>
+          <Button variant="ghost" size="icon" onClick={handleMicClick} disabled={loading} className={cn(isListening && 'text-destructive')}>
+            <Mic />
+          </Button>
+          <Button onClick={() => handleSend()} disabled={loading || (!input.trim() && !uploadedImage)}>
             <Send />
           </Button>
         </div>
