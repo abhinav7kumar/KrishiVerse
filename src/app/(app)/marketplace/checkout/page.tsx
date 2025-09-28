@@ -30,21 +30,33 @@ import {
   Package,
   Store,
   CreditCard,
+  Landmark,
+  Wallet,
 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { addDays, format } from 'date-fns';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const checkoutSchema = z.object({
   name: z.string().min(2, 'Name is too short'),
   address: z.string().min(10, 'Please enter a full address'),
   phone: z.string().regex(/^\d{10}$/, 'Please enter a valid 10-digit phone number'),
+  paymentMethod: z.enum(['upi', 'card', 'netbanking']),
+  upiId: z.string().optional(),
   deliveryOption: z.enum(['doorstep', 'pickup', 'center']),
   promoCode: z.string().optional(),
-});
+}).refine(data => {
+    if (data.paymentMethod === 'upi') {
+      return data.upiId && z.string().email().safeParse(`${data.upiId.replace('@', '.')}@example.com`).success;
+    }
+    return true;
+  }, {
+    message: "Please enter a valid UPI ID (e.g., name@bank)",
+    path: ["upiId"],
+  });
 
 type CheckoutFormValues = z.infer<typeof checkoutSchema>;
 
@@ -64,10 +76,14 @@ export default function CheckoutPage() {
       name: '',
       address: '',
       phone: '',
+      paymentMethod: 'upi',
+      upiId: 'abhinav.kumar@oksbi',
       deliveryOption: 'doorstep',
       promoCode: '',
     },
   });
+  
+  const paymentMethod = form.watch('paymentMethod');
 
   const onSubmit = (data: CheckoutFormValues) => {
     const orderId = `KV-${Date.now()}`;
@@ -82,15 +98,12 @@ export default function CheckoutPage() {
       estimatedDeliveryDate,
     };
     
-    // In a real app, this would redirect to Razorpay
     toast({
       title: 'Redirecting to Payment...',
       description: 'Please complete your payment to confirm the order.',
     });
 
-    // Simulate payment success
     setTimeout(() => {
-      // Store order details in session storage before clearing cart
       sessionStorage.setItem('latestOrder', JSON.stringify(orderDetails));
       router.push(`/marketplace/confirmation?orderId=${orderId}`);
       clearCart();
@@ -159,6 +172,62 @@ export default function CheckoutPage() {
                     </FormItem>
                   )}
                 />
+                
+                <FormField
+                  control={form.control}
+                  name="paymentMethod"
+                  render={({ field }) => (
+                    <FormItem className="space-y-3">
+                      <FormLabel>Payment Method</FormLabel>
+                      <FormControl>
+                        <RadioGroup
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                          className="grid grid-cols-3 gap-4"
+                        >
+                          <FormItem>
+                            <RadioGroupItem value="upi" id="upi" className="peer sr-only" />
+                            <FormLabel htmlFor="upi" className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
+                              <Wallet className="mb-3 h-6 w-6"/>
+                              UPI
+                            </FormLabel>
+                          </FormItem>
+                          <FormItem>
+                             <RadioGroupItem value="card" id="card" className="peer sr-only" />
+                            <FormLabel htmlFor="card" className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
+                              <CreditCard className="mb-3 h-6 w-6"/>
+                              Card
+                            </FormLabel>
+                          </FormItem>
+                          <FormItem>
+                             <RadioGroupItem value="netbanking" id="netbanking" className="peer sr-only" />
+                            <FormLabel htmlFor="netbanking" className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary">
+                              <Landmark className="mb-3 h-6 w-6"/>
+                              Netbanking
+                            </FormLabel>
+                          </FormItem>
+                        </RadioGroup>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {paymentMethod === 'upi' && (
+                  <FormField
+                    control={form.control}
+                    name="upiId"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>UPI ID</FormLabel>
+                        <FormControl>
+                          <Input placeholder="your-upi-id@bank" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
 
                 <FormField
                   control={form.control}
@@ -206,22 +275,6 @@ export default function CheckoutPage() {
                   )}
                 />
 
-                <FormField
-                  control={form.control}
-                  name="promoCode"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Promo Code</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter promo code (if any)" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        Enter a valid promo code for discounts.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
               </div>
 
               <div className="space-y-6">
@@ -260,6 +313,19 @@ export default function CheckoutPage() {
                   Proceed to Payment
                   <CreditCard className="ml-2"/>
                 </Button>
+                <FormField
+                  control={form.control}
+                  name="promoCode"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Promo Code</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter promo code (if any)" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
             </form>
           </Form>

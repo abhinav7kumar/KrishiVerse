@@ -8,8 +8,8 @@ import {
   Leaf,
   ScanLine,
   ShoppingCart,
+  Store,
   Trophy,
-  Truck,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -56,7 +56,7 @@ const navItems = [
   {
     href: '/marketplace',
     label: 'Marketplace',
-    icon: ShoppingCart,
+    icon: Store,
     tooltip: 'Sustainable Produce',
     isGroup: true,
   },
