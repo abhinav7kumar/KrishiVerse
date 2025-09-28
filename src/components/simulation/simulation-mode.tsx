@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Gamepad2, ArrowLeft, Wind, Sun, Droplets, Spade, Wheat, AlertTriangle, CheckCircle, XCircle, Bug, Shield, Tractor } from 'lucide-react';
+import { Gamepad2, ArrowLeft, Wind, Sun, Droplets, Spade, Wheat, AlertTriangle, CheckCircle, XCircle, Bug, Shield, Tractor, Leaf, Bone, TestTube } from 'lucide-react';
 import { useState, useEffect, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { Progress } from '@/components/ui/progress';
@@ -37,6 +37,17 @@ export type Game = {
   levels: Level[];
 };
 
+
+// SVG components for plant stages
+const Seed = () => <circle cx="12" cy="18" r="1" fill="saddlebrown" />;
+const Sprout = () => <path d="M12 18 C 11 16, 11 14, 12 12 M12 18 C 13 16, 13 14, 12 12 M10 12 C 10 10, 12 10, 12 12 M14 12 C 14 10, 12 10, 12 12" stroke="green" strokeWidth="1.5" fill="none" />;
+const Seedling = () => <g transform="translate(0 4)"><path d="M12 18 V 10 M10 12 l-4 -2 M14 12 l4 -2 M10 15 l-3 0 M14 15 l3 0" stroke="green" strokeWidth="1.5" fill="none" /></g>;
+const GrownPlant = () => <g transform="translate(0 2)"><path d="M12 18 V 6 M9 9 l-4 -2 M15 9 l4 -2 M9 12 l-5 0 M15 12 l5 0 M9 15 l-4 2 M15 15 l4 2" stroke="green" strokeWidth="1.5" fill="none" /></g>;
+const FruitingPlant = () => <g><path d="M12 18 V 6 M9 9 l-4 -2 M15 9 l4 -2 M9 12 l-5 0 M15 12 l5 0 M9 15 l-4 2 M15 15 l4 2" stroke="green" strokeWidth="1.5" fill="none" /><circle cx="8" cy="7" r="1.5" fill="orange" /><circle cx="16" cy="7" r="1.5" fill="orange" /><circle cx="10" cy="14" r="1.5" fill="orange" /></g>;
+const HarvestedPlant = () => <g><path d="M12 18 V 6 M9 9 l-4 -2 M15 9 l4 -2 M9 12 l-5 0 M15 12 l5 0 M9 15 l-4 2 M15 15 l4 2" stroke="darkkhaki" strokeWidth="1.5" fill="none" /></g>;
+const WitheredPlant = () => <path d="M12 18 C 10 16, 10 13, 11 11 C 12 9, 13 11, 13 11 M11 11 C 11.5 13, 12.5 13, 13 11" stroke="saddlebrown" strokeWidth="1.5" fill="none" />;
+
+
 function GamePlayer({ game, onBack }: { game: Game; onBack: () => void }) {
   const [currentLevelIndex, setCurrentLevelIndex] = useState(0);
   const [feedback, setFeedback] = useState<{ text: string, correct: boolean } | null>(null);
@@ -44,13 +55,16 @@ function GamePlayer({ game, onBack }: { game: Game; onBack: () => void }) {
   const [isGameWon, setIsGameWon] = useState(false);
 
   const initialGameState = useMemo(() => ({
-    soil: 'default', // 'prepared', 'tilled', 'damaged', 'compost'
-    water: 50, // 0-100
-    growth: 0, // 0-4 stages
+    soil: 'default',
+    water: 50,
+    growth: 0,
     pests: false,
     weeds: false,
     seeded: false,
-    crop: game.id === 'crop-growth' ? 'wheat' : 'generic'
+    beneficials: 0,
+    nutrients: { n: 50, p: 50, k: 50 },
+    crop: game.id === 'crop-growth' ? 'wheat' : 'generic',
+    health: 100,
   }), [game.id]);
   
   const [gameState, setGameState] = useState(initialGameState);
@@ -64,38 +78,32 @@ function GamePlayer({ game, onBack }: { game: Game; onBack: () => void }) {
     // Update game state based on the action
     setGameState(prev => {
       let newState = { ...prev };
-      switch (choice.action) {
-        // Soil Actions
-        case 'add_compost': newState.soil = 'compost'; break;
-        case 'till_soil': newState.soil = 'tilled'; break;
-        case 'do_nothing_soil': newState.soil = 'damaged'; break;
-        
-        // Planting Actions
-        case 'plant_seeds': newState.seeded = true; break;
-        case 'plant_crowded': newState.growth = -1; break; // Withered state
-        case 'plant_deep': newState.seeded = true; break; // Will fail to sprout
+      const [action, value] = choice.action.split(':');
+      const numValue = parseInt(value, 10);
 
-        // Watering Actions
-        case 'drip_irrigation': newState.water = Math.min(100, prev.water + 40); if(newState.seeded) newState.growth=1; break;
-        case 'sprinkler': newState.water = Math.min(100, prev.water + 20); if(newState.seeded) newState.growth=1; break;
-        case 'flood': newState.water = 100; newState.growth = -1; break; // Withered
-        
-        // Pest Control Actions
-        case 'add_ladybugs': newState.pests = false; break;
-        case 'use_chemicals': newState.pests = false; newState.soil = 'damaged'; break;
-        case 'do_nothing_pests': newState.growth = Math.max(0, prev.growth - 1); break;
-        
-        // Weeding Actions
-        case 'hand_weed': newState.weeds = false; newState.growth = Math.min(4, prev.growth + 1); break;
-
-        // Harvest Action
-        case 'harvest': newState.growth = 4; setIsGameWon(true); break;
-        
-        // General incorrect actions
-        case 'fail_choice': 
-            if(level.title.includes("Pest")){ newState.growth = 0; }
-            if(level.title.includes("Water")){ newState.water = 10; }
-            break;
+      switch (action) {
+        case 'add_compost': newState.soil = 'compost'; newState.nutrients = { n: 80, p: 70, k: 75 }; break;
+        case 'till_soil': newState.soil = 'tilled'; newState.health -= 10; break;
+        case 'do_nothing_soil': newState.soil = 'damaged'; newState.health -= 20; break;
+        case 'plant_seeds': newState.seeded = true; newState.growth = 1; break;
+        case 'plant_crowded': newState.growth = -1; newState.health = 0; break;
+        case 'plant_deep': newState.seeded = true; newState.health -= 15; break;
+        case 'drip_irrigation': newState.water = Math.min(100, prev.water + 40); if(newState.seeded && prev.growth < 2) newState.growth = 2; break;
+        case 'sprinkler': newState.water = Math.min(100, prev.water + 20); if(newState.seeded && prev.growth < 2) newState.growth = 2; break;
+        case 'flood': newState.water = 100; newState.growth = -1; newState.health = 0; break;
+        case 'add_ladybugs': newState.pests = false; newState.beneficials += 20; break;
+        case 'use_chemicals': newState.pests = false; newState.soil = 'damaged'; newState.health -= 30; newState.beneficials = 0; break;
+        case 'do_nothing_pests': newState.health -= 25; break;
+        case 'hand_weed': newState.weeds = false; newState.growth = Math.min(5, prev.growth + 1); break;
+        case 'mulch': newState.weeds = false; newState.water = Math.min(100, prev.water + 10); break;
+        case 'harvest': newState.growth = 5; setIsGameWon(true); break;
+        case 'fail_choice': newState.health = Math.max(0, prev.health - 20); break;
+        case 'set_growth': newState.growth = numValue; break;
+        case 'set_health': newState.health = numValue; break;
+        case 'set_water': newState.water = numValue; break;
+        case 'set_weeds': newState.weeds = value === 'true'; break;
+        case 'set_pests': newState.pests = value === 'true'; break;
+        case 'add_npk': newState.nutrients = { n: Math.min(100, prev.nutrients.n + 20), p: Math.min(100, prev.nutrients.p + 20), k: Math.min(100, prev.nutrients.k + 20)}; break;
       }
       return newState;
     });
@@ -107,23 +115,23 @@ function GamePlayer({ game, onBack }: { game: Game; onBack: () => void }) {
       setIsLevelCompleted(false);
       setFeedback(null);
       
-      // Introduce new challenges for the next level based on game type
       setGameState(prev => {
         let newState = { ...prev };
         const nextLevel = game.levels[currentLevelIndex + 1];
 
-        if (nextLevel.title.includes("Pest")) {
-          newState.pests = true;
+        if (nextLevel.title.includes("Pest")) newState.pests = true;
+        if (nextLevel.title.includes("Weed")) newState.weeds = true;
+        if (nextLevel.title.includes("Water")) newState.water = 30;
+        if (nextLevel.title.includes("Nutrient")) {
+           newState.nutrients.n = Math.max(0, newState.nutrients.n - 20);
+           newState.nutrients.p = Math.max(0, newState.nutrients.p - 20);
         }
-        if (nextLevel.title.includes("Care") || nextLevel.title.includes("Weed")) {
-          newState.weeds = true;
-          newState.growth = 2;
-        }
-        if(nextLevel.title.includes("Water")) {
-           newState.water = 30; // Simulate water usage
-        }
+        if (prev.growth > 0 && prev.growth < 5) newState.growth = Math.min(5, prev.growth + 1);
+        
         return newState;
       });
+    } else {
+        setIsGameWon(true);
     }
   };
 
@@ -136,29 +144,27 @@ function GamePlayer({ game, onBack }: { game: Game; onBack: () => void }) {
   };
   
   const getPlantStage = () => {
-    if (gameState.growth === -1) return '🥀'; // Withered
-    if (gameState.growth === 4) return '🌾'; // Harvested
-    if (gameState.growth === 3) return '🌱'; // Grown
-    if (gameState.growth === 2) return '🌱'; // Sprouted with challenges
-    if (gameState.growth === 1) return '🌱'; // Sprouted
-    if (gameState.seeded) return '·'; // Seed
-    return '';
+    if (gameState.growth === -1 || gameState.health <= 0) return <WitheredPlant />;
+    if (gameState.growth >= 5) return <HarvestedPlant />;
+    if (gameState.growth === 4) return <FruitingPlant />;
+    if (gameState.growth === 3) return <GrownPlant />;
+    if (gameState.growth === 2) return <Seedling />;
+    if (gameState.growth === 1) return <Sprout />;
+    if (gameState.seeded) return <Seed />;
+    return null;
   };
   
   const getSoilClass = () => {
     switch (gameState.soil) {
-      case 'compost': return 'bg-yellow-900/60'; // Rich soil
+      case 'compost': return 'bg-yellow-900/60';
       case 'prepared': return 'bg-yellow-900/50';
-      case 'tilled': return 'bg-yellow-700/40'; // Over-tilled
-      case 'damaged': return 'bg-red-900/40'; // Damaged
-      case 'default': default: return 'bg-yellow-800/20'; // Default soil
+      case 'tilled': return 'bg-yellow-700/40';
+      case 'damaged': return 'bg-red-900/40';
+      default: return 'bg-yellow-800/20';
     }
   }
 
-  const getWaterLevelStyle = () => {
-      const height = `${gameState.water}%`;
-      return { height };
-  }
+  const getWaterLevelStyle = () => ({ height: `${gameState.water}%` });
 
   const getIconForGame = () => {
     switch(game.id) {
@@ -180,7 +186,7 @@ function GamePlayer({ game, onBack }: { game: Game; onBack: () => void }) {
               {getIconForGame()}
               {game.title}
             </CardTitle>
-            <CardDescription>{isGameWon ? "Congratulations! You've completed the simulation!" : level.title}</CardDescription>
+            <CardDescription>{isGameWon ? "Congratulations! You've completed the simulation!" : `Stage ${level.level}: ${level.title}`}</CardDescription>
           </div>
           <Button variant="ghost" size="icon" onClick={onBack}>
             <ArrowLeft />
@@ -188,29 +194,22 @@ function GamePlayer({ game, onBack }: { game: Game; onBack: () => void }) {
         </div>
       </CardHeader>
       <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Visual Farm Plot */}
         <div className='flex flex-col items-center justify-center bg-muted/50 rounded-lg p-4 border border-dashed'>
-            <div className='w-full h-56 relative rounded-md overflow-hidden'>
-                {/* Sky */}
+            <div className='w-full h-64 relative rounded-md overflow-hidden'>
                 <div className='absolute inset-x-0 top-0 h-2/3 bg-blue-200 flex justify-end p-2'>
                     <Sun className="text-yellow-400 w-8 h-8" />
                 </div>
-
-                {/* Soil & Water */}
                 <div className={cn('absolute inset-x-0 bottom-0 h-1/3 transition-colors duration-500', getSoilClass())}>
                    <div className="absolute inset-0 bg-blue-400/30 transition-all" style={getWaterLevelStyle()}></div>
                 </div>
                 
-                {/* Plant */}
-                 <div className='absolute inset-0 flex items-center justify-center text-6xl'>
-                    <span className={cn(gameState.growth > 0 && gameState.growth < 4 && 'text-green-600')}>{getPlantStage()}</span>
+                 <div className='absolute inset-0 flex items-center justify-center'>
+                    <svg viewBox="0 0 24 24" className="w-32 h-32" >{getPlantStage()}</svg>
                  </div>
-
-                 {/* Weeds & Pests */}
                  {gameState.weeds && (
                     <>
-                     <div className='absolute bottom-[33%] left-[30%] text-2xl text-green-800/80'>V</div>
-                     <div className='absolute bottom-[33%] left-[60%] text-2xl text-green-800/80'>V</div>
+                     <div className='absolute bottom-1/3 left-[30%] text-2xl'><svg viewBox="0 0 24 24" className="w-8 h-8"><path d="M12 18 l-2 -2 m2 2 l2 -2 M10 16 l-1 -2 M14 16 l1 -2" stroke="darkolivegreen" strokeWidth="2" /></svg></div>
+                     <div className='absolute bottom-1/3 left-[60%] text-2xl'><svg viewBox="0 0 24 24" className="w-8 h-8"><path d="M12 18 l-2 -2 m2 2 l2 -2 M10 16 l-1 -2 M14 16 l1 -2" stroke="darkolivegreen" strokeWidth="2" /></svg></div>
                     </>
                  )}
                  {gameState.pests && (
@@ -218,21 +217,34 @@ function GamePlayer({ game, onBack }: { game: Game; onBack: () => void }) {
                         <Bug className="w-5 h-5 text-gray-900 animate-pulse" />
                      </div>
                  )}
+                  {gameState.beneficials > 0 && (
+                     <div className='absolute top-[40%] left-[38%] text-lg'>
+                        <svg viewBox="0 0 24 24" className="w-5 h-5"><circle cx="12" cy="12" r="4" fill="red" /><circle cx="11" cy="11" r="1" fill="black" /><circle cx="13" cy="11" r="1" fill="black" /></svg>
+                     </div>
+                 )}
             </div>
             <div className="w-full space-y-2 mt-2">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Leaf className="w-4 h-4 text-green-500" />
+                    <span>Health:</span>
+                    <Progress value={gameState.health} className="w-full h-2" />
+                </div>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Droplets className="w-4 h-4 text-blue-500" />
-                    <span>Water Level:</span>
+                    <span>Water:</span>
                     <Progress value={gameState.water} className="w-full h-2" />
                 </div>
                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Tractor className="w-4 h-4 text-yellow-800" />
-                    <span>Soil: <span className="font-semibold capitalize text-foreground">{gameState.soil}</span></span>
+                    <TestTube className="w-4 h-4 text-purple-500" />
+                    <span className="flex gap-2">
+                      <span>N: {gameState.nutrients.n}</span>
+                      <span>P: {gameState.nutrients.p}</span>
+                      <span>K: {gameState.nutrients.k}</span>
+                    </span>
                 </div>
             </div>
         </div>
         
-        {/* Game Controls */}
         <div className="space-y-4">
           <p className="text-muted-foreground">{level.description}</p>
           <div className="grid grid-cols-1 gap-3">
@@ -264,9 +276,14 @@ function GamePlayer({ game, onBack }: { game: Game; onBack: () => void }) {
           </div>
           {isGameWon ? (
             <Button onClick={resetGame}>Play Again</Button>
-          ) : feedback?.correct && currentLevelIndex < game.levels.length - 1 ? (
-             <Button onClick={handleNextLevel}>Next Stage</Button>
-          ): null}
+          ) : feedback?.correct ? (
+             <Button onClick={handleNextLevel}>{currentLevelIndex < game.levels.length - 1 ? 'Next Stage' : 'Complete Game'}</Button>
+          ): gameState.health > 0 ? null : (
+            <div>
+              <p className='text-destructive-foreground mb-2'>Your crop has withered. You must restart.</p>
+              <Button onClick={resetGame} variant="destructive">Restart Game</Button>
+            </div>
+          )}
         </CardFooter>
       )}
     </Card>
